@@ -6,6 +6,10 @@
 
 require('./bootstrap');
 
+require("./memo2");
+
+require("./delete_memo")
+
 window.Vue = require('vue').default;
 
 /**
