@@ -2,6 +2,9 @@
 
 use Illuminate\Support\Facades\Route;
 
+use App\Http\Controllers\UserController;
+
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -21,7 +24,7 @@ Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
-Route::resource("users", App\Http\Controllers\UserController::class);
+Route::resource("users", UserController::class);
 
 Route::get("user_licenses/edit", "App\Http\Controllers\UserLicenseController@edit")->name("user_licenses.edit");
 Route::patch("user_licenses/update", "App\Http\Controllers\UserLicenseController@update")->name("user_licenses.update");
