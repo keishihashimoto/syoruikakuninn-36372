@@ -17,7 +17,7 @@
                         <div class="form-group row">
                             <label for="name" class="col-lg-4 col-form-label text-lg-right">お名前</label>
 
-                            <div class="col-lg-6">
+                            <div class="col-lg-8">
                                 <input id="name" type="text" class="form-control @error('name') is-invalid @enderror" name="name" value="{{ Auth::user()->name }}" required autocomplete="name" autofocus>
 
                                 @error('name')
@@ -29,14 +29,31 @@
                         </div>
 
                         <div class="form-group row">
-                            <label for="birthday" class="col-lg-4 col-form-label text-lg-right">ご生年月日</label>
+                            <label class="col-lg-4 col-form-label text-lg-right">ご生年月日</label>
 
-                            <div class="col-lg-6">
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <input id="year" type="text" class="form-control @error('year') is-invalid @enderror" name="year" value="{{ date('Y', strtotime($user->birthday)) }}" required autocomplete="year" placeholder="西暦で入力してください" autofocus>
-                                    <div class="p-2">年</div>
+                            <div class="container col-lg-8 mx-lg-0">
+                                <div class="row px-3">
+                                    <div class="col-4 col-sm-6 input-group input-group-sm p-0">
+                                        <input class="form-control" type="text" name="year" value="{{ date('Y', strtotime($user->birthday)) }}" required autocomplete="year" autofocus placeholder="西暦で入力">
+                                        <div class="input-group-append">
+                                            <span class="input-group-text rounded-0">年</span>
+                                        </div>
+                                    </div>
+                                
+                                    <div class="col-4 col-sm-3 input-group input-group-sm p-0">
+                                        <input class="form-control rounded-0" type="text" name="month" value="{{ date('n', strtotime($user->birthday)) }}" required autocomplete="month" autofocus>
+                                        <div class="input-group-append">
+                                            <span class="input-group-text rounded-0">月</span>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-4 col-sm-3 input-group input-group-sm p-0">
+                                        <input class="form-control rounded-0" type="text" name="date" value="{{ date('j', strtotime($user->birthday)) }}" required autocomplete="date" autofocus>
+                                        <div class="input-group-append">
+                                            <span class="input-group-text">日</span>
+                                        </div>
+                                    </div>
                                 </div>
-
                                 @if($errors->has("year"))
                                 <div>
                                     @foreach($errors->get("year") as $error)
@@ -46,11 +63,6 @@
                                     @endforeach
                                 </div>   
                                 @endif
-
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <input id="month" type="text" class="form-control @error('month') is-invalid @enderror" name="month" value="{{ date('n', strtotime($user->birthday)) }}" required autocomplete="month" placeholder="半角数字で入力してください" autofocus>
-                                    <div class="p-2">月</div>
-                                </div>
 
                                 @if($errors->has("month"))
                                     <div>
@@ -62,11 +74,6 @@
                                     </div>
                                 @endif
 
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <input id="date" type="text" class="form-control @error('date') is-invalid @enderror" name="date" value="{{ date('j', strtotime($user->birthday)) }}" required autocomplete="date" placeholder="半角数字で入力してください" autofocus>
-                                    <div class="p-2">日</div>
-                                </div>
-
                                 @if($errors->has("date"))
                                 <div>
                                     @foreach($errors->get("date") as $error)
@@ -76,9 +83,10 @@
                                     @endforeach
                                 </div>
                                 @endif
-                            </div>
-                        </div>
 
+                            </div>
+                            
+                        </div>
                         
                         
                         <div class="form-group mb-0 row row-cols-1 pr-2">

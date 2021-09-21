@@ -14,7 +14,7 @@
                         <div class="form-group row">
                             <label for="name" class="col-lg-4 col-form-label text-lg-right">お名前</label>
 
-                            <div class="col-lg-6">
+                            <div class="col-lg-8">
                                 <input id="name" type="text" class="form-control @error('name') is-invalid @enderror" name="name" value="{{ old('name') }}" required autocomplete="name" autofocus>
 
                                 @error('name')
@@ -26,14 +26,30 @@
                         </div>
 
                         <div class="form-group row">
-                            <label for="birthday" class="col-lg-4 col-form-label text-lg-right">ご生年月日</label>
+                            <label class="col-lg-4 col-form-label text-lg-right">ご生年月日</label>
 
-                            <div class="col-lg-6">
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <input id="year" type="text" class="form-control @error('year') is-invalid @enderror" name="year" value="{{ old('year') }}" required autocomplete="year" placeholder="西暦で入力してください" autofocus>
-                                    <div class="p-2">年</div>
+                            <div class="col-lg-8">
+                                <div class="row">
+                                    <div class="input-group input-group-sm col-4 col-sm-6 pr-0">
+                                        <input id="year" type="text" class="form-control @error('year') is-invalid @enderror" name="year" value="{{ old('year') }}" required autocomplete="year" autofocus placeholder="西暦で入力">
+                                        <div class="input-group-append">
+                                            <span class="input-group-text rounded-0">年</span>
+                                        </div>
+                                    </div>
+                                    <div class="input-group input-group-sm col-4 col-sm-3 px-0">
+                                        <input id="month" type="text" class="form-control rounded-0 @error('month') is-invalid @enderror" name="month" value="{{ old('month') }}" required autocomplete="month" autofocus>
+                                        <div class="input-group-append">
+                                            <span class="input-group-text rounded-0">月</span>
+                                        </div>
+                                    </div>
+                                    <div class="input-group input-group-sm col-4 col-sm-3 pl-0">
+                                        <input id="date" type="text" class="form-control rounded-0 @error('date') is-invalid @enderror" name="date" value="{{ old('date') }}" required autocomplete="date" autofocus>
+                                        <div class="input-group-append">
+                                            <span class="input-group-text">日</span>
+                                        </div>
+                                    </div>
                                 </div>
-
+                                
                                 @if($errors->has("year"))
                                 <div>
                                     @foreach($errors->get("year") as $error)
@@ -44,10 +60,7 @@
                                 </div>   
                                 @endif
 
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <input id="month" type="text" class="form-control @error('month') is-invalid @enderror" name="month" value="{{ old('month') }}" required autocomplete="month" placeholder="半角数字で入力してください" autofocus>
-                                    <div class="p-2">月</div>
-                                </div>
+                                
 
                                 @if($errors->has("month"))
                                     <div>
@@ -59,10 +72,7 @@
                                     </div>
                                 @endif
 
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <input id="date" type="text" class="form-control @error('date') is-invalid @enderror" name="date" value="{{ old('date') }}" required autocomplete="date" placeholder="半角数字で入力してください" autofocus>
-                                    <div class="p-2">日</div>
-                                </div>
+        
 
                                 @if($errors->has("date"))
                                 <div>
@@ -79,7 +89,7 @@
                         <div class="form-group row">
                             <label for="email" class="col-lg-4 col-form-label text-lg-right">メールアドレス</label>
 
-                            <div class="col-lg-6">
+                            <div class="col-lg-8">
                                 <input id="email" type="email" class="form-control @error('email') is-invalid @enderror" name="email" value="{{ old('email') }}" required autocomplete="email">
 
                                 @error('email')
@@ -93,7 +103,7 @@
                         <div class="form-group row">
                             <label for="password" class="col-lg-4 col-form-label text-lg-right">パスワード</label>
 
-                            <div class="col-lg-6">
+                            <div class="col-lg-8">
                                 <input id="password" type="password" class="form-control @error('password') is-invalid @enderror" name="password" required autocomplete="new-password">
 
                                 @error('password')
@@ -107,7 +117,7 @@
                         <div class="form-group row">
                             <label for="password-confirm" class="col-lg-4 col-form-label text-lg-right">パスワード(確認用)</label>
 
-                            <div class="col-lg-6">
+                            <div class="col-lg-8">
                                 <input id="password-confirm" type="password" class="form-control" name="password_confirmation" required autocomplete="new-password">
                             </div>
                         </div>
