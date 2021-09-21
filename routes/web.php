@@ -21,7 +21,7 @@ Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
-Route::resource("users", "App\Http\Controllers\UserController");
+Route::resource("users", App\Http\Controllers\UserController::class);
 
 Route::get("user_licenses/edit", "App\Http\Controllers\UserLicenseController@edit")->name("user_licenses.edit");
 Route::patch("user_licenses/update", "App\Http\Controllers\UserLicenseController@update")->name("user_licenses.update");
