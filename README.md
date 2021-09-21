@@ -1,64 +1,108 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400"></a></p>
+## アプリ名
+本人確認君
+## アプリケーション概要 
+ドコモショップでの手続きに必要な書類を確認することのできるアプリです。
+## URL
+https://syoruikakuninn-36372.herokuapp.com/
+## テストアカウント
+email: test@test, password: 0000000a
+## 制作意図
+必要な書類が足りずに手続きができないという人が少しでも減ることを考えてこのアプリを作成しました。
+ドコモショップは、手続きの内容によって様々な書類が必要になります。
+しかし、来店前に必要な書類を確認する方法は電話問い合わせしかないため、必要な書類を気軽に確認することも難しく、結果として書類不足で手続きできないという状況が多々あります。
+このアプリは、そのような状況を解決するべく、スマートフォンから手軽に必要書類を確認できるようにするために開発しました。
+## DEMO
+#### 会員情報の確認
+[![Image from Gyazo](https://i.gyazo.com/76108235b5c3b083f9b3cf6aa13453fa.gif)](https://gyazo.com/76108235b5c3b083f9b3cf6aa13453fa)
+#### 身分証明書の登録
+[![Image from Gyazo](https://i.gyazo.com/a3c5b1affd8dd11e19887e0a848fe5a4.gif)](https://gyazo.com/a3c5b1affd8dd11e19887e0a848fe5a4)
+#### 手続きに必要な書類の確認
+[![Image from Gyazo](https://i.gyazo.com/8668c91129783b344ac4acbc1588895a.gif)](https://gyazo.com/8668c91129783b344ac4acbc1588895a)
+## 工夫したポイント
+スマートフォンのような、画面の小さなデバイスでも使いやすいようにデザインに拘りました。
+webアプリケーションでは、まずPCからのアクセスを第一に想定しているものも多いと思います。
+しかし、スマートフォンから手軽に事前確認を、と謳う携帯キャリア用のサービスである以上、スマートフォンからの見やすさに拘りました。
+具体的にはドロップダウンやレスポンシブデザインなどを用いて、画面が小さくても見づらくならないようなレイアウトを追求しました。
+## 使用技術
+フロントエンド：　HTML, CSS, JavaScript, jQuery, BootStrap
+サーバーサイド: PHP, Laravel
+## 今後実装したい機能
+法人名義のお客様や、契約者以外の代理人が来店する場合の必要書類も確認できるようにしたいと考えています。
+現在、このサービスで表示される必要書類は、成人した契約者が自分で来店する場合を想定しています。
+しかし、手続きに必要な書類は、契約者本人が来店するのかどうか、また、契約者が個人名義か法人名義かなどによって変わってきます。
+法人名義の場合や契約者本人の来店がない場合の必要書類についても確認できるようになれば、お客様・携帯ショップ双方にとってより便利なサービスになるので、法人名義や代理人来店時に対応できる機能を実装したいと考えています。
 
-<p align="center">
-<a href="https://travis-ci.org/laravel/framework"><img src="https://travis-ci.org/laravel/framework.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+## DB設計
 
-## About Laravel
+### usersテーブル
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+| Column         | Type    | Options                   |
+| -------------- | ------- | ------------------------- |
+| name           | string  | null: false               |
+| email          | string  | null: false, unique: true |
+| password       | string  | null: false               | 
+| birthday       | date    | null: false               | 
+| is_corporation | boolean | default: null             |
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+#### Associations
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+- hasMany(Memo)
+- hasMany(UserLicense)
+- hasMany(UserPay)
+- hasMany(UserPaper)
 
-## Learning Laravel
+c
+### memosテーブル
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+| Column            | Type    | Options                    |
+| ----------------- | ------- | -------------------------- |
+| user_id           | integer | null: false, foreign: true |
+| procedure_id      | integer | null: false                |
+| notice            | text    |                            |
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains over 1500 video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+#### Associations
 
-## Laravel Sponsors
+- belongsTo(User)
+- hasMany(MemoLicense)
+- hasMany(MemoPay)
+- hasMany(MemoPaper)
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the Laravel [Patreon page](https://patreon.com/taylorotwell).
 
-### Premium Partners
+### memo_licensesテーブル
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Cubet Techno Labs](https://cubettech.com)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[Many](https://www.many.co.uk)**
-- **[Webdock, Fast VPS Hosting](https://www.webdock.io/en)**
-- **[DevSquad](https://devsquad.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[OP.GG](https://op.gg)**
-- **[CMS Max](https://www.cmsmax.com/)**
-- **[WebReinvent](https://webreinvent.com/?utm_source=laravel&utm_medium=github&utm_campaign=patreon-sponsors)**
+| Column            | Type    | Options                    |
+| ----------------- | ------- | -------------------------- |
+| memo_id           | integer | null: false, foreign: true |
+| license_id        | integer | null: false                |
 
-## Contributing
+#### Associations
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+- belongsTo(Memo)
 
-## Code of Conduct
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+### meo_paysテーブル
 
-## Security Vulnerabilities
+| Column            | Type    | Options                    |
+| ----------------- | ------- | -------------------------- |
+| memo_id           | integer | null: false, foreign: true |
+| pay_id            | integer | null: false                |
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+#### Associations
 
-## License
+- belongsTo(Memo)
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+
+### memo_papersテーブル
+
+| Column            | Type    | Options                    |
+| ----------------- | ------- | -------------------------- |
+| memo_id           | integer | null: false, foreign: true |
+| paper_id          | integer | null: false                |
+
+#### Associations
+
+- belongsTo(Memo)
+
+
+## ER図
+[![Image from Gyazo](https://i.gyazo.com/5fa1a7932bc5736373a2249ab200997d.png)](https://gyazo.com/5fa1a7932bc5736373a2249ab200997d)
