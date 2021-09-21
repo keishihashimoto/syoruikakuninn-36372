@@ -9,7 +9,7 @@ use PHPUnit\Framework\Error\Notice;
 class Memo extends Model
 {
     use HasFactory;
-
+    # commit用
     public function memo_licenses(){
         return $this->hasMany("App\Models\MemoLicense");
     }
