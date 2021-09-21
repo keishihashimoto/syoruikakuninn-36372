@@ -5,16 +5,16 @@
     <div class="row justify-content-center">
         <div class="col-md-8">
             <div class="card">
-                <div class="card-header">{{ __('Register') }}</div>
+                <div class="card-header">お客様情報を登録してください</div>
 
                 <div class="card-body">
                     <form method="POST" action="{{ route('register') }}">
                         @csrf
 
                         <div class="form-group row">
-                            <label for="name" class="col-md-4 col-form-label text-md-right">お名前</label>
+                            <label for="name" class="col-lg-4 col-form-label text-lg-right">お名前</label>
 
-                            <div class="col-md-6">
+                            <div class="col-lg-6">
                                 <input id="name" type="text" class="form-control @error('name') is-invalid @enderror" name="name" value="{{ old('name') }}" required autocomplete="name" autofocus>
 
                                 @error('name')
@@ -26,9 +26,9 @@
                         </div>
 
                         <div class="form-group row">
-                            <label for="birthday" class="col-md-4 col-form-label text-md-right">ご生年月日<i> (全て半角数字で入力してください)</i></label>
+                            <label for="birthday" class="col-lg-4 col-form-label text-lg-right">ご生年月日</label>
 
-                            <div class="col-md-6">
+                            <div class="col-lg-6">
                                 <div class="d-flex justify-content-between align-items-center">
                                     <input id="year" type="text" class="form-control @error('year') is-invalid @enderror" name="year" value="{{ old('year') }}" required autocomplete="year" placeholder="西暦で入力してください" autofocus>
                                     <div class="p-2">年</div>
@@ -77,9 +77,9 @@
                         </div>
 
                         <div class="form-group row">
-                            <label for="email" class="col-md-4 col-form-label text-md-right">メールアドレス</label>
+                            <label for="email" class="col-lg-4 col-form-label text-lg-right">メールアドレス</label>
 
-                            <div class="col-md-6">
+                            <div class="col-lg-6">
                                 <input id="email" type="email" class="form-control @error('email') is-invalid @enderror" name="email" value="{{ old('email') }}" required autocomplete="email">
 
                                 @error('email')
@@ -91,9 +91,9 @@
                         </div>
 
                         <div class="form-group row">
-                            <label for="password" class="col-md-4 col-form-label text-md-right">パスワード</label>
+                            <label for="password" class="col-lg-4 col-form-label text-lg-right">パスワード</label>
 
-                            <div class="col-md-6">
+                            <div class="col-lg-6">
                                 <input id="password" type="password" class="form-control @error('password') is-invalid @enderror" name="password" required autocomplete="new-password">
 
                                 @error('password')
@@ -105,17 +105,17 @@
                         </div>
 
                         <div class="form-group row">
-                            <label for="password-confirm" class="col-md-4 col-form-label text-md-right">パスワードをもう一度後入力ください</label>
+                            <label for="password-confirm" class="col-lg-4 col-form-label text-lg-right">パスワード(確認用)</label>
 
-                            <div class="col-md-6">
+                            <div class="col-lg-6">
                                 <input id="password-confirm" type="password" class="form-control" name="password_confirmation" required autocomplete="new-password">
                             </div>
                         </div>
                         
-                        <div class="form-group row mb-0">
-                            <div class="col-md-6 offset-md-4">
-                                <button type="submit" class="btn btn-primary">
-                                    {{ __('Register') }}
+                        <div class="form-group mb-0 d-flex justify-content-end">
+                            <div>
+                                <button type="submit" class="btn btn-link">
+                                    <i class="far fa-user fa-fw"></i>お客様情報を登録する
                                 </button>
                             </div>
                         </div>
