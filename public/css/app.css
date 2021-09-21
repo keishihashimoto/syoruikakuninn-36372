@@ -10002,3 +10002,12 @@ h3 {
     border-color: #dee2e6;
   }
 }
+
+/* 自分で記述したCSS */
+.birthday-errors{
+  width: 100%;
+  margin-top: 0.25rem;
+  font-size: 80%;
+  color: #e3342f;
+  
+}
