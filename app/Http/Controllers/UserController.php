@@ -34,9 +34,32 @@ class UserController extends Controller
 
     public function update(User $user, Request $request){
         $this->identifyUser($user);
+        # バリデーション
+        $rules = [
+            "name" => ["required", "string", "max:255"],
+            "year" => ["required", "integer", "min:1800"],
+            "month" => ["required", "integer", "min:1", "max:12"],
+            "date" => ["required", "integer", "min:1", "max:31"]
+        ];
+        $messages = [
+            "name.required" => "お名前を入力してください",
+            "name.string" => "お名前に不適切な文字が使用されています",
+            "name.max" => "お名前は255文字以下で入力してください",
+            "year.required" => "お生まれになった年が入力されていません",
+            "year.integer" => "お生まれになった年は数字で入力してください",
+            "year.min" => "お生まれになった年は4桁の数字で入力してください",
+            "month.required" => "お生まれになった月が入力されていません",
+            "month.integer" => "お生まれになった月は数字で入力してください",
+            "month.min" => "お生まれになった月は1 ~ 12で入力してください",
+            "month.max" => "お生まれになった月は1 ~ 12で入力してください",
+            " date.required" => "お生まれになった日が入力されていません",
+            "date.integer" => "お生まれになった日は数字で入力してください",
+            "date.min" => "お生まれになった日は1 ~ 31で入力してください",
+            "date.max" => "お生まれになった日は1 ~ 31で入力してください"
+        ];
+        $this->validate($request, $rules, $messages);
         // ユーザー基本情報の更新部分
         $user->name = $request->input("name");
-        $user->email = $request->input("email");
         $user->birthday = $request->input("year")."-".$request->input("month")."-".$request->input("date");
         $user->save();
 

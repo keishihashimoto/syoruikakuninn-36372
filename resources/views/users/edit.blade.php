@@ -79,19 +79,7 @@
                             </div>
                         </div>
 
-                        <div class="form-group row">
-                            <label for="email" class="col-lg-4 col-form-label text-lg-right">メールアドレス</label>
-
-                            <div class="col-lg-6">
-                                <input id="email" type="email" class="form-control @error('email') is-invalid @enderror" name="email" value="{{ Auth::user()->email }}" required autocomplete="email">
-
-                                @error('email')
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                @enderror
-                            </div>
-                        </div>
+                        
                         
                         <div class="form-group mb-0 row row-cols-1 pr-2">
                             <div class="col text-right">
@@ -100,14 +88,21 @@
                                 </button>
                             </div>
                             <div class="col text-right">
-                                <button type="button" class="btn btn-link text-secondary"><i class="fas fa-long-arrow-alt-left fa-fw"></i>お客様情報のページに戻る</button>
+                                <button type="button" class="btn btn-link text-secondary"><i class="fas fa-long-arrow-alt-left fa-fw"></i><a href="/users/{{ Auth::user()->id }}" class="text-secondary">お客様情報のページに戻る</button>
                             </div>
                         </div>
+
                     </form>
+
                 </div>
+
             </div>
+
         </div>
+
     </div>
+
 </div>
+
 
 @endsection
