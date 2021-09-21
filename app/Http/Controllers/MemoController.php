@@ -189,9 +189,11 @@ class MemoController extends Controller
                 if($memo->notice == null){
                     if(isset($procedure['notice'])){
                         $memo->notice = $procedure['notice'];
+                        $memo->save();
                     }
                 }else{
                     $memo->notice .= PHP_EOL.$procedure['notice'];
+                    $memo->save();
                 }
             }
         } elseif($main_pattern == 2) {
