@@ -96,7 +96,7 @@
     <table class="table mt-4 font-12">
       <thead>
         <tr>
-          <th colspan="2"  id="memo">ご登録いただいているメモ一覧{{ count(Auth::user()->memos) }}</th>
+          <th colspan="2"  id="memo">ご登録いただいているメモ一覧</th>
         </tr>
       </thead>
       <tr>
