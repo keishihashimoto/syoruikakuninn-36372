@@ -17,7 +17,7 @@ class UserController extends Controller
         $this->middleware("auth");
         # ログインしていない時にはログイン画面に戻される
     }
-    
+    // 
     public function index(){
         return view("users.index");
     }
