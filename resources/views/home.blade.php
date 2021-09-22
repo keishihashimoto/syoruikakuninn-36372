@@ -23,7 +23,7 @@
             <div class="carousel-item" data-interval="3000">
                 <div class="card mx-1 shadow text-center">
                     <img class="img-fluid" src="/images/smartphone_check_3.jpg">
-                    <div class="alert alert-secondary mb-0">一度確認した必要書類は後からでも確認可能</div>
+                    <div class="alert alert-secondary mb-0">一度確認した内容は後からでも表示可能</div>
                 </div>    
             </div>
             <a href="#carousel" role="button" class="carousel-control-prev" data-slide="prev">
