@@ -64,6 +64,7 @@ class UserController extends Controller
             "date.min" => "お生まれになった日は1 ~ 31で入力してください",
             "date.max" => "お生まれになった日は1 ~ 31で入力してください"
         ];
+        
         $this->validate($request, $rules, $messages);
         // ユーザー基本情報の更新部分
         $user->name = $request->input("name");

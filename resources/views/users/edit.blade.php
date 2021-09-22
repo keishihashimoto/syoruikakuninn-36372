@@ -18,7 +18,7 @@
                             <label for="name" class="col-lg-4 col-form-label text-lg-right">お名前</label>
 
                             <div class="col-lg-8">
-                                <input id="name" type="text" class="form-control @error('name') is-invalid @enderror" name="name" value="{{ Auth::user()->name }}" required autocomplete="name" autofocus>
+                                <input id="name" type="text" class="form-control @error('name') is-invalid @enderror" name="name" value="{{ old('name', $user->name) }}" required autocomplete="name" autofocus>
 
                                 @error('name')
                                     <span class="invalid-feedback" role="alert">
@@ -34,21 +34,21 @@
                             <div class="container col-lg-8 mx-lg-0">
                                 <div class="row px-3">
                                     <div class="col-4 col-sm-6 input-group input-group-sm p-0">
-                                        <input class="form-control" type="text" name="year" value="{{ date('Y', strtotime($user->birthday)) }}" required autocomplete="year" autofocus placeholder="西暦">
+                                        <input class="form-control" type="text" name="year" value="{{ old('year',date('Y', strtotime($user->birthday))) }}" required autocomplete="year" autofocus placeholder="西暦">
                                         <div class="input-group-append">
                                             <span class="input-group-text rounded-0">年</span>
                                         </div>
                                     </div>
                                 
                                     <div class="col-4 col-sm-3 input-group input-group-sm p-0">
-                                        <input class="form-control rounded-0" type="text" name="month" value="{{ date('n', strtotime($user->birthday)) }}" required autocomplete="month" autofocus>
+                                        <input class="form-control rounded-0" type="text" name="month" value="{{ old('month', date('n', strtotime($user->birthday))) }}" required autocomplete="month" autofocus>
                                         <div class="input-group-append">
                                             <span class="input-group-text rounded-0">月</span>
                                         </div>
                                     </div>
 
                                     <div class="col-4 col-sm-3 input-group input-group-sm p-0">
-                                        <input class="form-control rounded-0" type="text" name="date" value="{{ date('j', strtotime($user->birthday)) }}" required autocomplete="date" autofocus>
+                                        <input class="form-control rounded-0" type="text" name="date" value="{{ old('date', date('j', strtotime($user->birthday))) }}" required autocomplete="date" autofocus>
                                         <div class="input-group-append">
                                             <span class="input-group-text">日</span>
                                         </div>
