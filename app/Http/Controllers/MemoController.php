@@ -176,6 +176,11 @@ class MemoController extends Controller
                     $memo_paper->paper_id = 3;
                     $memo_paper->save();
                 } else {
+                    if($memo->notice == null){
+                        $memo->notice = "以下の場合には、ご本人様確認書類とお支払い設定の書類に加えて補助書類（住民票・公共料金の領収証など）が必要になります。".PHP_EOL."・ご本人様確認書類が住民基本台帳カードで、お支払い方法の設定を通帳＋金融機関届出印で行う場合。".PHP_EOL."・ご本人様確認書類が健康保険証で、お支払い方法の設定をキャッシュカードもしくは「通帳＋金融機関届出印」で行う場合。";
+                    } else {
+                        $memo->notice .= PHP_EOL."以下の場合には、ご本人様確認書類とお支払い設定の書類に加えて補助書類（住民票・公共料金の領収証など）が必要になります。".PHP_EOL."・ご本人様確認書類が住民基本台帳カードで、お支払い方法の設定を通帳＋金融機関届出印で行う場合。".PHP_EOL."・ご本人様確認書類が健康保険証で、お支払い方法の設定をキャッシュカードもしくは「通帳＋金融機関届出印」で行う場合。";
+                    }
                     $memo->save();
                     $memo_license = new MemoLicense();
                     $memo_license->memo_id = $memo->id;
@@ -185,7 +190,7 @@ class MemoController extends Controller
             }
             # 最後に手続き固有のnoticeの追加を忘れない。
             $procedure = Memo::$procedures[($id - 1)];
-            if($memo->memo_licenses[0]->license_id != 99){
+            if($memo->memo_licenses[0]->license_id != 99 || $id == 3){
                 if($memo->notice == null){
                     if(isset($procedure['notice'])){
                         $memo->notice = $procedure['notice'];
