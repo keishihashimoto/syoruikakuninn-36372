@@ -1,11 +1,12 @@
 @extends('layouts.app')
 
 @section('content')
+<div class="text-center pt-3 h5 alert alert-secondary">スマートフォンから必要書類のご確認がいただけるようになりました</div>
 <div class="container">
     
         <!--アイキャッチ画像 -->
-    <div class="text-center pt-3 h5">スマートフォンから必要書類のご確認がいただけるようになりました</div>
-    <div class="carousel slide" data-ride="carousel">
+    
+    <div class="carousel slide" data-ride="carousel" id="carousel">
         <div class="carousel-inner">
             <div class="carousel-item">
                 <div class="card mx-1 shadow text-center">
@@ -25,6 +26,14 @@
                     <div class="alert alert-secondary mb-0">一度確認した必要書類は後からでも確認可能</div>
                 </div>    
             </div>
+            <a href="#carousel" role="button" class="carousel-control-prev" data-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="sr-only">Previous</span>
+            </a>
+            <a class="carousel-control-next" role="button" href="#carousel" data-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="sr-only">Next</span>
+            </a>
         </div>
     </div>
     
