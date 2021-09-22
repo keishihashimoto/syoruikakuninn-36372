@@ -8,19 +8,19 @@
     
     <div class="carousel slide" data-ride="carousel" id="carousel">
         <div class="carousel-inner">
-            <div class="carousel-item">
+            <div class="carousel-item" data-interval="3000">
                 <div class="card mx-1 shadow text-center">
                     <img class="img-fluid" src="/images/5142200_l.jpg">
                     <div class="alert alert-secondary mb-0">ご来店前の書類確認にご協力ください</div>
                 </div>
             </div>
-            <div class="carousel-item active">
+            <div class="carousel-item active" data-interval="3000">
                 <div class="card mx-1 shadow text-center">
                     <img class="img-fluid" src="/images/licenses.jpg">
                     <div class="alert alert-secondary mb-0">お手続きに必要な書類を自動で表示</div>
                 </div>
             </div>
-            <div class="carousel-item">
+            <div class="carousel-item" data-interval="3000">
                 <div class="card mx-1 shadow text-center">
                     <img class="img-fluid" src="/images/smartphone_check_3.jpg">
                     <div class="alert alert-secondary mb-0">一度確認した必要書類は後からでも確認可能</div>
