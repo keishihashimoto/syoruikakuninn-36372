@@ -17,23 +17,30 @@ class UserController extends Controller
         $this->middleware("auth");
         # ログインしていない時にはログイン画面に戻される
     }
-    // 
+    
     public function index(){
         return view("users.index");
     }
 
+
     public function show(User $user){
-        $this->identifyUser($user);
+        if(Auth::user()->id != $user->id){
+            return redirect()->route("home");
+        }
         return view("users.show", compact("user"));
     }
 
     public function edit(User $user){
-        $this->identifyUser($user);
+        if(Auth::user()->id != $user->id){
+            return redirect()->route("home");
+        }
         return view("users.edit", compact("user"));
     }
 
     public function update(User $user, Request $request){
-        $this->identifyUser($user);
+        if(Auth::user()->id != $user->id){
+            return redirect()->route("home");
+        }
         # バリデーション
         $rules = [
             "name" => ["required", "string", "max:255"],
@@ -67,14 +74,16 @@ class UserController extends Controller
     }
 
     public function destroy(User $user){
-        $this->identifyUser($user);
+        if(Auth::user()->id != $user->id){
+            return redirect()->route("home");
+        }
         $user->delete();
         return view("users.destroy");
     }
 
     private function identifyUser(User $user){
         if ($user->id != Auth::user()->id){
-            return redirect()->route("users.index");
+            return redirect("/home");
         }
     }
 }

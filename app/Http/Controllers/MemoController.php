@@ -417,6 +417,9 @@ class MemoController extends Controller
 
 
     public function destroy(Memo $memo){
+        if(Auth::user()->id != $memo->user_id){
+            return redirect ()->route("home");
+        }
         if($memo->user_id == Auth::user()->id){
             $memo->delete();
         }
@@ -425,6 +428,15 @@ class MemoController extends Controller
     }
 
     public function show(Memo $memo){
+        if(Auth::user()->id != $memo->user_id){
+            return redirect ()->route("home");
+        }
         return view("memos.show", compact("memo"));
+    }
+
+    private function checkUser(Memo $memo){
+        if(Auth::user()->id != $memo->user_id){
+            return redirect ()->route("home");
+        }
     }
 }

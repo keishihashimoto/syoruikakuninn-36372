@@ -1,7 +1,7 @@
 @extends("layouts.app")
 
 @section("content")
-<div class="alert">お手続きメモの確認ページです</div>
+<div class="alert text-center">お手続きメモの確認ページです</div>
 
 <div class="container">
   <div class="card shadow-sm">
