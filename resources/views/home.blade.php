@@ -4,34 +4,30 @@
 <div class="container">
     
         <!--アイキャッチ画像 -->
-    <div class="card">
-        <img class="card-img img-fluid" src="/images/shop_staff3.png" style="opacity: 0.8;">
-        <div class="card-img-overlay d-flex align-items-end justify-content-end pb-2">
-        </div>
-    </div>
-    <div class="text-center pt-3 h5">ご来店前に必要書類のご確認がいただけるようになりました</div>
-    <div class="container">
-        <div class="row row-cols-md-3 row-cols-1">
-            <div class="mb-3 mb-md-0">
+    <div class="text-center pt-3 h5">スマートフォンから必要書類のご確認がいただけるようになりました</div>
+    <div class="carousel slide" data-ride="carousel">
+        <div class="carousel-inner">
+            <div class="carousel-item">
                 <div class="card mx-1 shadow text-center">
-                    <img class="img-fluid" src="/images/smartphone.png">
-                    <div class="alert alert-secondary mb-0">お手続きに必要な書類をスマホから確認</div>
+                    <img class="img-fluid" src="/images/5142200_l.jpg">
+                    <div class="alert alert-secondary mb-0">ご来店前の書類確認にご協力ください</div>
                 </div>
             </div>
-            <div class="mb-3 mb-md-0">
+            <div class="carousel-item active">
                 <div class="card mx-1 shadow text-center">
-                    <img class="img-fluid" src="/images/id_card.png">
-                    <div class="alert alert-secondary mb-0">お持ちの書類を登録して<br class="d-inline d-sm-none">必要なものを自動で表示</div>
+                    <img class="img-fluid" src="/images/licenses.jpg">
+                    <div class="alert alert-secondary mb-0">お手続きに必要な書類を自動で表示</div>
                 </div>
             </div>
-            <div class="mb-3 mb-md-0">
+            <div class="carousel-item">
                 <div class="card mx-1 shadow text-center">
-                    <img class="img-fluid" src="/images/smartphone-check.png">
-                    <div class="alert alert-secondary mb-0">一度確認した必要書類は、<br class="d-inline d-sm-none">後からでも確認可能</div>
+                    <img class="img-fluid" src="/images/smartphone_check_3.jpg">
+                    <div class="alert alert-secondary mb-0">一度確認した必要書類は後からでも確認可能</div>
                 </div>    
             </div>
         </div>
     </div>
+    
     <div class="card mt-4">
         <div class="h4 card-header text-center pt-2 alert alert-secondary mb-1" role="alert">ご注意事項</div>
         <ul class="list-group list-group-flush">
