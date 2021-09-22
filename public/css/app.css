@@ -10011,3 +10011,17 @@ h3 {
   color: #e3342f;
   
 }
+
+@media(max-width: 576px){
+  main{
+    height: calc(100vh - 173px);
+    overflow: scroll;
+  }
+}
+
+@media(min-width: 576px){
+  main{
+    height: calc(100vh - 127px);
+    overflow: scroll;
+  }
+}
