@@ -31,7 +31,7 @@
                             <div class="col-lg-8">
                                 <div class="row">
                                     <div class="input-group input-group-sm col-4 col-sm-6 pr-0">
-                                        <input id="year" type="text" class="form-control @error('year') is-invalid @enderror" name="year" value="{{ old('year') }}" required autocomplete="year" autofocus placeholder="西暦で入力">
+                                        <input id="year" type="text" class="form-control @error('year') is-invalid @enderror" name="year" value="{{ old('year') }}" required autocomplete="year" autofocus placeholder="西暦">
                                         <div class="input-group-append">
                                             <span class="input-group-text rounded-0">年</span>
                                         </div>

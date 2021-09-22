@@ -34,7 +34,7 @@
                             <div class="container col-lg-8 mx-lg-0">
                                 <div class="row px-3">
                                     <div class="col-4 col-sm-6 input-group input-group-sm p-0">
-                                        <input class="form-control" type="text" name="year" value="{{ date('Y', strtotime($user->birthday)) }}" required autocomplete="year" autofocus placeholder="西暦で入力">
+                                        <input class="form-control" type="text" name="year" value="{{ date('Y', strtotime($user->birthday)) }}" required autocomplete="year" autofocus placeholder="西暦">
                                         <div class="input-group-append">
                                             <span class="input-group-text rounded-0">年</span>
                                         </div>
