@@ -10,6 +10,11 @@ use Illuminate\Support\Facades\Auth;
 
 class UserPaperController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware("auth");
+    }
+
     public function create(){
         return view("user_papers.create");
     }

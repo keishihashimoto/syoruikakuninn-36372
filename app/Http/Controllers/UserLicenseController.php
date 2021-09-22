@@ -10,6 +10,11 @@ use Illuminate\Support\Facades\Auth;
 
 class UserLicenseController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware("auth");
+    }
+
     public function create(){
         return view ("user_licenses.create");
     }
