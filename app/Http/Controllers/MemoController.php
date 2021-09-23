@@ -228,6 +228,14 @@ class MemoController extends Controller
                 if($id == 4){
                     $memo->notice = "分割のご希望：なし。";
                 }
+                if(isset(Memo::$procedures[($id - 1)]['notice'])){
+                    if($memo->notice == null){
+                        $memo->notice = Memo::$procedures[($id - 1)]['notice'];
+                    } else {
+                        $memo->notice .= PHP_EOL.Memo::$procedures[($id - 1)]['notice'];
+                    }
+                    
+                }
                 if(UserLicense::where("user_id", Auth::user()->id)->first() != null){
                     $memo->save();
                     foreach(Auth::user()->user_licenses as $user_license){
