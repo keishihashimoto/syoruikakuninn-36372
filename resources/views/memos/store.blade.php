@@ -28,7 +28,7 @@
                 <div class="text-right" style="font-size: 10px;">以下の中からいずれか一つをお持ちください</div>
                 <div class="d-flex flex-wrap pt-2">
                   @foreach($memo->memo_licenses as $memo_license)
-                    <div class="pr-3">{{ App\Models\User::$licenses[($memo_license->license_id - 1)]['name'] }}</div>
+                    <div class="mr-3 my-1 badge badge-gray" style="font-size: 14px;">{{ App\Models\User::$licenses[($memo_license->license_id - 1)]['name'] }}</div>
                   @endforeach
                 </dvi>
               @endif
@@ -47,7 +47,7 @@
             <div class="text-right" style="font-size: 10px;">以下の中からいずれか一つをお持ちください</div>
             <div class="d-flex flex-wrap pt-2">
               @foreach($memo->memo_pays as $memo_pay)
-                <div class="pr-3">{{ App\Models\UserPay::$pays[($memo_pay->pay_id - 1)]['name'] }}</div>
+                <div class="mr-3 my-1 badge badge-gray" style="font-size: 14px;">{{ App\Models\UserPay::$pays[($memo_pay->pay_id - 1)]['name'] }}</div>
               @endforeach
             </div>
           </li>
@@ -59,7 +59,7 @@
             <div class="text-right" style="font-size: 10px;">以下の中からいずれか一つをお持ちください</div>
             <div class="d-flex flex-wrap pt-2">
               @foreach($memo->memo_papers as $memo_paper)
-                <div class="pr-3">{{ App\Models\UserPaper::$papers[($memo_paper->paper_id - 1)]["name"] }}</div>
+                <div class="mr-3 my-1 badge badge-gray" style="font-size: 14px;">{{ App\Models\UserPaper::$papers[($memo_paper->paper_id - 1)]["name"] }}</div>
               @endforeach
             </div>
           </li>
@@ -73,19 +73,18 @@
         @endif
       </ul>
     </div>
-  </div>
-
-  <div class="row row-cols-1">
-    <div class="cols d-flex justify-content-end pr-4 pt-2">
-      <a class="btn btn-link" href="/users/{{ Auth::user()->id}}"><i class="far fa-user fa-fw"></i>お客様情報のページに戻る</a>
+    <div class="row row-cols-1">
+      <div class="cols d-flex justify-content-end pr-4 pt-2">
+        <a class="btn btn-link" href="/users/{{ Auth::user()->id}}"><i class="far fa-user fa-fw"></i>お客様情報のページに戻る</a>
+      </div>
+      <div class="cols d-flex justify-content-end pr-4">
+        <form action="/memos/{{ $memo->id }}" method="POST">
+        @csrf
+        @method("delete")
+          <button type="submit" class="btn btn-link text-danger"><i class="fas fa-trash fa-fw"></i>メモを削除する</button>
+        </form>
+      </div>  
     </div>
-    <div class="cols d-flex justify-content-end pr-4">
-      <form action="/memos/{{ $memo->id }}" method="POST">
-      @csrf
-      @method("delete")
-        <button type="submit" class="btn btn-link text-danger"><i class="fas fa-trash fa-fw"></i>メモを削除する</button>
-      </form>
-    </div>  
   </div>
 
 </div>

@@ -41,7 +41,7 @@
           現在ご登録いただいているご本人様確認書類は特にございません
           @else
             @foreach($user->user_licenses as $user_license)
-            <div class="pr-3">{{ App\Models\User::$licenses[($user_license->license_id - 1)]["name"] }}</div>
+            <div class="mr-3 my-1 badge badge-gray" style="font-size: 14px;">{{ App\Models\User::$licenses[($user_license->license_id - 1)]["name"] }}</div>
             @endforeach
           @endif
         </div>
@@ -61,7 +61,7 @@
             @foreach(App\Models\UserPay::$pays as $pay)
               @if(is_null(App\Models\UserPay::where("user_id", Auth::user()->id)->where("pay_id", $pay['id'])->first()))
               @else
-                <div class="pr-3">{{ $pay['name'] }}</div>
+                <div class="mr-3 my-1 badge badge-gray" style="font-size: 14px;">{{ $pay['name'] }}</div>
               @endif
             @endforeach
           @endif
@@ -82,7 +82,7 @@
             @foreach(App\Models\UserPaper::$papers as $paper)
               @if(is_null(App\Models\UserPaper::where("user_id", Auth::user()->id)->where("paper_id", $paper['id'])->first()))
               @else
-                <div class="pr-3">{{ $paper['name'] }}</div>
+                <div class="mr-3 my-1 badge badge-gray" style="font-size: 14px;">{{ $paper['name'] }}</div>
               @endif
             @endforeach
           @endif

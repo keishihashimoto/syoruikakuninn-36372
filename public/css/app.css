@@ -10025,3 +10025,8 @@ h3 {
     overflow: scroll;
   }
 }
+
+.badge-gray {
+  color: #212529;
+  background-color: whitesmoke;
+}
