@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="text-center pt-3 h5 alert alert-secondary">スマートフォンから必要書類のご確認がいただけるようになりました</div>
+<div class="text-center pt-3 h5 alert alert-secondary">スマートフォンから<br class="d-inline d-sm-none">書類がご確認頂けるようになりました</div>
 <div class="container">
     
         <!--アイキャッチ画像 -->
@@ -11,19 +11,19 @@
             <div class="carousel-item" data-interval="3000">
                 <div class="card mx-1 shadow text-center">
                     <img class="img-fluid" src="/images/5142200_l.jpg">
-                    <div class="alert alert-secondary mb-0">ご来店前の書類確認にご協力ください</div>
+                    <div class="alert alert-secondary mb-0 rounded-0">ご来店前の書類確認にご協力ください</div>
                 </div>
             </div>
             <div class="carousel-item active" data-interval="3000">
                 <div class="card mx-1 shadow text-center">
                     <img class="img-fluid" src="/images/licenses.jpg">
-                    <div class="alert alert-secondary mb-0">お手続きに必要な書類を自動で表示</div>
+                    <div class="alert alert-secondary mb-0 rounded-0">お手続きに必要な書類を自動で表示</div>
                 </div>
             </div>
             <div class="carousel-item" data-interval="3000">
                 <div class="card mx-1 shadow text-center">
                     <img class="img-fluid" src="/images/smartphone_check_3.jpg">
-                    <div class="alert alert-secondary mb-0">一度確認した内容は後からでも表示可能</div>
+                    <div class="alert alert-secondary mb-0 rounded-0">一度確認した内容は後からでも表示可能</div>
                 </div>    
             </div>
             <a href="#carousel" role="button" class="carousel-control-prev" data-slide="prev">
