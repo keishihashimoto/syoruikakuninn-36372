@@ -103,7 +103,7 @@
         <th>作成日時</th>
         <th>お手続き内容</th>
       </tr>
-      @foreach(Auth::user()->memos as $memo)
+      @foreach(App\Models\Memo::where("user_id", Auth::user()->id)->orderBy("id", "desc")->get() as $memo)
       <tr>
         <td class="align-middle">{{ $memo->created_at->format("y/m/d") }}</td>
         <td class="d-sm-flex justify-content-sm-between align-items-center">
