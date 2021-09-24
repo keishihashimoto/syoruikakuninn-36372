@@ -137,10 +137,10 @@ class MemoController extends Controller
                     $memo_license->memo_id = $memo->id;
                     $memo_license->license_id = 5;
                     $memo_license->save();
-                    for($k = 1; $k <= 2; $k++){
+                    foreach(Auth::user()->user_pays as $user_pay){
                         $memo_pay = new MemoPay();
                         $memo_pay->memo_id = $memo->id;
-                        $memo_pay->pay_id = $k;
+                        $memo_pay->pay_id = $user_pay->pay_id;
                         $memo_pay->save();
                     }
                     for($l = 1; $l <= 2; $l++){
@@ -190,7 +190,7 @@ class MemoController extends Controller
             }
             # 最後に手続き固有のnoticeの追加を忘れない。
             $procedure = Memo::$procedures[($id - 1)];
-            if($memo->memo_licenses[0]->license_id != 99 || $id == 3){
+            if($memo->memo_licenses[0]->license_id != 99 || $id == 3 || $id == 1){
                 if($memo->notice == null){
                     if(isset($procedure['notice'])){
                         $memo->notice = $procedure['notice'];
