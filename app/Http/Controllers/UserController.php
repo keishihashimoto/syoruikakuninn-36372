@@ -79,7 +79,7 @@ class UserController extends Controller
             return redirect()->route("home");
         }
         $user->delete();
-        return view("users.destroy");
+        return redirect()->route("home");
     }
 
     private function identifyUser(User $user){
