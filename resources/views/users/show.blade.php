@@ -34,8 +34,8 @@
     </div>
 
     <div class="card shadow-sm mt-4">
-      <div class="text-center h2 pt-2 pb-1 bg-light mb-0">お手持ちのご本人様確認書類一覧</div>
-      <div class="d-flex justify-content-between align-items-center pl-2">
+      <div class="text-center h2 pt-2 pb-1 bg-light mb-0"><span class="d-none d-sm-inline">お手持ちの</span>ご本人様確認書類一覧</div>
+      <div class="d-flex justify-content-between align-items-center pl-3">
         <div class="d-flex flex-wrap py-2 pl-sm-4">
           @if((Auth::user()->user_licenses->first()) == null)
           現在ご登録いただいているご本人様確認書類は特にございません
@@ -52,8 +52,8 @@
     </div>
 
     <div class="card shadow-sm mt-4">
-      <div class="text-center h2 pt-2 pb-1 bg-light mb-0">ご登録のお支払い方法一覧</div>
-      <div class="d-flex justify-content-between align-items-center pl-2">
+      <div class="text-center h2 pt-2 pb-1 bg-light mb-0"><span class="d-none d-sm-inline">ご登録の</span>お支払い方法一覧</div>
+      <div class="d-flex justify-content-between align-items-center pl-3">
         <div class="d-flex flex-wrap py-2 pl-sm-4">
           @if(is_null(Auth::user()->user_pays->first()))
           現在ご登録いただいているお支払い方法はありません
@@ -73,8 +73,8 @@
     </div>
 
     <div class="card shadow-sm mt-4">
-      <div class="text-center h2 pt-2 pb-1 bg-light mb-0">ご登録の補助書類一覧</div>
-      <div class="d-flex justify-content-between align-items-center pl-2">
+      <div class="text-center h2 pt-2 pb-1 bg-light mb-0"><span class="d-none d-sm-inline">ご登録の</span>補助書類一覧</div>
+      <div class="d-flex justify-content-between align-items-center pl-3">
         <div class="d-flex flex-wrap py-2 pl-sm-4">
           @if(is_null(Auth::user()->user_papers->first()))
           現在ご登録いただいている補助書類はありません

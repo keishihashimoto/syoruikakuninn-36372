@@ -4,17 +4,17 @@
 
 <h2 class="alert alert-secondary text-center">お手続きに必要な書類の<br class="d-inline d-sm-none">ご確認ページです</h2>
 
-<div class="mx-md-auto" style="max-width: 900px;">
+<div class="mx-md-auto px-3" style="max-width: 900px;">
 
   @if($errors->has("procedure-select"))
     <ul>
       @foreach($errors->get("procedure-select") as $error)
-        <li style="list-style: none;">{{$error}}</li>
+        <li style="list-style: none;" class="alert text-danger">{{$error}}</li>
       @endforeach
     </ul>
   @endif
 
-  <div class="px-3 fw-normal">ご希望のお手続きを以下の中から選択してください</div>
+  <div class="px-3 fw-normal">ご希望のお手続きをお選びください</div>
   <form action="{{ route('memos.store') }}" method="post">
     @csrf
     <div class="form-group">
