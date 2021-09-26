@@ -230,5 +230,7 @@ return [
         'View' => Illuminate\Support\Facades\View::class,
 
     ],
+    "BASIC_AUTH_PASSWORD" => env("BASIC_AUTH_PASSWORD"),
+    "BASIC_AUTH_USER" => env("BASIC_AUTH_USER")
 
 ];
