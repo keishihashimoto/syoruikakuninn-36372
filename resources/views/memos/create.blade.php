@@ -28,6 +28,20 @@
       </select>
     </div>
 
+    @if(Auth::user()->is_corporation == false && $age < 20)
+      <div id="parent">
+        <div class="fs-2 alert alert-danger">保護者の方が同時にご来店されるかどうかお選びください<br class="d-inline d-md-none">（未選択の場合はご来店なしとして扱われます）</div>
+        <div class="form-check form-group px-5">
+          <input type="radio" class="form-check-input" id="parent-with" name="parent" value="1">
+          <label for="parent-with" class="form-check-label">保護者の来店あり</label>
+        </div>
+        <div class="form-check form-group px-5">
+          <input type="radio" class="form-check-input" id="without" name="parent" value="2">
+          <label for="parent-without" class="form-check-label">保護者の方の来店なし</label>
+        </div>
+      </div>
+    @endif
+    
     <div id="loan" style="display: none;">
       <div class="fs-2 alert alert-danger">機種のご購入方法を以下からお選びください<br class="d-inline d-sm-none">（未選択の場合は分割をご希望として扱われます）</div>
       <div class="form-check form-group px-5">

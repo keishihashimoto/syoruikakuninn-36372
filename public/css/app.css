@@ -10002,31 +10002,3 @@ h3 {
     border-color: #dee2e6;
   }
 }
-
-/* 自分で記述したCSS */
-.birthday-errors{
-  width: 100%;
-  margin-top: 0.25rem;
-  font-size: 80%;
-  color: #e3342f;
-  
-}
-
-@media(max-width: 576px){
-  main{
-    height: calc(100vh - 173px);
-    overflow: scroll;
-  }
-}
-
-@media(min-width: 576px){
-  main{
-    height: calc(100vh - 127px);
-    overflow: scroll;
-  }
-}
-
-.badge-gray {
-  color: #212529;
-  background-color: whitesmoke;
-}

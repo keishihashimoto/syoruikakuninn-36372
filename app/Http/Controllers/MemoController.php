@@ -25,7 +25,12 @@ class MemoController extends Controller
     }
 
     public function create(){
-        return view("memos.create");
+        # 条件分岐用、ユーザーの年齢を取得
+        $today = new DateTime(date("Y-m-d"));
+        $birthday = new DateTime(Auth::user()->birthday);
+        $age = $today->diff($birthday)->format("%y");
+        $age = (int)$age;
+        return view("memos.create", compact("age"));
     }
 
     public function store(Request $request){
@@ -45,15 +50,40 @@ class MemoController extends Controller
         $birthday = new DateTime(Auth::user()->birthday);
         $age = $today->diff($birthday)->format("%y");
         $age = (int)$age;
-        # 手続きのパターンによって処理を分岐
+        # 個人名義の場合は、メモの備考欄冒頭に成人かどうかと学生かどうかを明記。
+        # 法人名義の場合は、法人名義である旨を明記
+        $memo = new Memo();
+        if(Auth::user()->is_corporation == 1){
+            $memo->notice = "お客様の属性：法人";
+        }elseif($age >= 20){
+            $memo->notice = "お客様の属性：個人名義(成人）";
+        }else{
+            $memo->notice = "お客様の属性：個人名義(未成年）";
+        }
+        if($request->input("student") == 1){
+            $memo->notice .= PHP_EOL."学生のお客様です";
+        }elseif(Auth::user()->is_corporation !== 1){
+            $memo->notice .= PHP_EOL."学生のお客様ではありません";
+        }
+        # 一部の手続きに関しては、未成年限定で注意事項を追加
+        # 最初に、保護者の同時来店の有無を記載
+        # 対象の手続きは、都度同意かどうかによらないものが1 ~ 4, 18, 21
+        # 都度同意の場合だと同意書などが必要になるのが5 ~ 11, 16, 17, 19, 20
+        # 最初に、保護者の同時来店の有無をメモに追加
         $id = $request->input("procedure-select");
+        if(Auth::user()->is_corporation != true && $age < 20 && $request->input("parent") == 1 && ($id <= 11 || ($id >= 16 && $id <= 21))){
+            $memo->notice .= PHP_EOL."保護者の方の来店：あり。";
+        }elseif(Auth::user()->is_corporation != true && $age < 20 && $request->input("parent") == 2 && ($id <= 11 || ($id >= 16 && $id <= 21))){
+            $memo->notice .= PHP_EOL."保護者の方の来店：なし。";
+        }
+        # 同意書などについての諸注意は、memoの最後に追加
+        # 手続きのパターンによって処理を分岐
         $main_pattern = Memo::$procedures[($id - 1)]["main_pattern"];
         if($main_pattern == 1){
-            $memo = new Memo();
             $memo->user_id = Auth::user()->id;
             $memo->procedure_id = $id;
             if((Auth::user()->user_licenses->first() == null) || Auth::user()->user_pays->first() == null){
-                $memo->notice = "ご本人様確認書類もしくはお支払い設定できるものをお持ちでない場合には、上記のお手続きをいただくことはできません。".PHP_EOL."他にお手続きいただける書類がないかどうか、ご自身以外の方の口座などでのお支払い設定が可能かどうかにつきましては、ショップまたはインフォメーションセンターにてお問い合わせください。";
+                $memo->notice .= PHP_EOL."ご本人様確認書類もしくはお支払い設定できるものをお持ちでない場合には、上記のお手続きをいただくことはできません。".PHP_EOL."他にお手続きいただける書類がないかどうか、ご自身以外の方の口座などでのお支払い設定が可能かどうかにつきましては、ショップまたはインフォメーションセンターにてお問い合わせください。";
                 $memo->save();
                 $memo_license = new MemoLicense();
                 $memo_license->memo_id = $memo->id;
@@ -109,7 +139,7 @@ class MemoController extends Controller
                     $memo_license->memo_id = $memo->id;
                     $memo_license->license_id = 99;
                     $memo_license->save();
-                    $memo->notice = "住基カードと通帳＋印鑑でのお手続きに関しては、お客様ご自身のお名前の入った補助書類が必要です。".PHP_EOL."住民票や公共料金の領収証などをご用意いただきますようお願いいたします。".PHP_EOL."他にお手続きが可能な方法があるかにつきましては、ショップもしくはインフォメーションセンターにてご確認ください。";
+                    $memo->notice .= PHP_EOL."住基カードと通帳＋印鑑でのお手続きに関しては、お客様ご自身のお名前の入った補助書類が必要です。".PHP_EOL."住民票や公共料金の領収証などをご用意いただきますようお願いいたします。".PHP_EOL."他にお手続きが可能な方法があるかにつきましては、ショップもしくはインフォメーションセンターにてご確認ください。";
                     $memo->save();
                 }
             } else {
@@ -154,7 +184,7 @@ class MemoController extends Controller
                     ])->where("pay_id", 2)->first() != null && UserPaper::where([
                         ["user_id", Auth::user()->id]
                     ])->where("paper_id", 3)->first() != null){
-                        $memo->notice = "お支払い方法がご自身名義のキャッシュカードの場合、同一住所のご家族のお名前の入った公共料金の領収証も補助書類としてご利用いただけます。";
+                        $memo->notice .= PHP_EOL."お支払い方法がご自身名義のキャッシュカードの場合、同一住所のご家族のお名前の入った公共料金の領収証も補助書類としてご利用いただけます。";
                         $memo->save();
                     }
                 } elseif(UserPay::where([
@@ -177,7 +207,7 @@ class MemoController extends Controller
                     $memo_paper->save();
                 } else {
                     if($memo->notice == null){
-                        $memo->notice = "以下の場合には、ご本人様確認書類とお支払い設定の書類に加えて補助書類（住民票・公共料金の領収証など）が必要になります。".PHP_EOL."・ご本人様確認書類が住民基本台帳カードで、お支払い方法の設定を通帳＋金融機関届出印で行う場合。".PHP_EOL."・ご本人様確認書類が健康保険証で、お支払い方法の設定をキャッシュカードもしくは「通帳＋金融機関届出印」で行う場合。";
+                        $memo->notice .= PHP_EOL."以下の場合には、ご本人様確認書類とお支払い設定の書類に加えて補助書類（住民票・公共料金の領収証など）が必要になります。".PHP_EOL."・ご本人様確認書類が住民基本台帳カードで、お支払い方法の設定を通帳＋金融機関届出印で行う場合。".PHP_EOL."・ご本人様確認書類が健康保険証で、お支払い方法の設定をキャッシュカードもしくは「通帳＋金融機関届出印」で行う場合。";
                     } else {
                         $memo->notice .= PHP_EOL."以下の場合には、ご本人様確認書類とお支払い設定の書類に加えて補助書類（住民票・公共料金の領収証など）が必要になります。".PHP_EOL."・ご本人様確認書類が住民基本台帳カードで、お支払い方法の設定を通帳＋金融機関届出印で行う場合。".PHP_EOL."・ご本人様確認書類が健康保険証で、お支払い方法の設定をキャッシュカードもしくは「通帳＋金融機関届出印」で行う場合。";
                     }
@@ -193,7 +223,7 @@ class MemoController extends Controller
             if($memo->memo_licenses[0]->license_id != 99 || $id == 3 || $id == 1){
                 if($memo->notice == null){
                     if(isset($procedure['notice'])){
-                        $memo->notice = $procedure['notice'];
+                        $memo->notice .= PHP_EOL.$procedure['notice'];
                         $memo->save();
                     }
                 }else{
@@ -201,14 +231,13 @@ class MemoController extends Controller
                     $memo->save();
                 }
             }
-        } elseif($main_pattern == 2) {
+        } elseif($main_pattern == 2 && $id != 23) {
             // 機種変更かそれ以外かで処理を分岐
-            $memo = new Memo();
             $memo->user_id = Auth::user()->id;
             $memo->procedure_id = $id;
             if($id == 4 && $request->input("loan") == 1){
                 if(count(Auth::user()->user_licenses) != 0){
-                    $memo->notice = "分割のご希望：あり。";
+                    $memo->notice .= PHP_EOL."分割のご希望：あり。";
                     $memo->save();
                     foreach(Auth::user()->user_licenses as $user_license){
                         $memo_license = new MemoLicense();
@@ -217,7 +246,7 @@ class MemoController extends Controller
                         $memo_license->save();
                     }
                 } else {
-                    $memo->notice = "分割のご希望：あり。".PHP_EOL."申し訳ございませんが、ご本人様確認書類をお持ちでない場合には、分割でのお手続きは致しかねます。".PHP_EOL."ただし、ご自身名義のクレジットカードかキャッシュカードをお持ちの場合には、ネットワーク暗証番号・御生年月日・ご住所のいずれかを御申告いただくことでご対応可能です。".PHP_EOL."詳しくは、ショップまたインフォメーションセンターにお問い合わせください。";
+                    $memo->notice .= PHP_EOL."分割のご希望：あり。".PHP_EOL."申し訳ございませんが、ご本人様確認書類をお持ちでない場合には、分割でのお手続きは致しかねます。".PHP_EOL."ただし、ご自身名義のクレジットカードかキャッシュカードをお持ちの場合には、ネットワーク暗証番号・御生年月日・ご住所のいずれかを御申告いただくことでご対応可能です。".PHP_EOL."詳しくは、ショップまたインフォメーションセンターにお問い合わせください。";
                     $memo->save();
                     $memo_license = new MemoLicense();
                     $memo_license->memo_id = $memo->id;
@@ -226,11 +255,11 @@ class MemoController extends Controller
                 }
             } else {
                 if($id == 4){
-                    $memo->notice = "分割のご希望：なし。";
+                    $memo->notice .= PHP_EOL."分割のご希望：なし。";
                 }
                 if(isset(Memo::$procedures[($id - 1)]['notice'])){
                     if($memo->notice == null){
-                        $memo->notice = Memo::$procedures[($id - 1)]['notice'];
+                        $memo->notice .= PHP_EOL.Memo::$procedures[($id - 1)]['notice'];
                     } else {
                         $memo->notice .= PHP_EOL.Memo::$procedures[($id - 1)]['notice'];
                     }
@@ -246,7 +275,7 @@ class MemoController extends Controller
                     }
                 } else {
                     if($memo->notice == null){
-                        $memo->notice = "お手続きの際に、ネットワーク暗証番号・ご住所・ご連絡先番号のいずれかをお伺いします。あらかじめご了承ください。";
+                        $memo->notice .= PHP_EOL."お手続きの際に、ネットワーク暗証番号・ご住所・ご連絡先番号のいずれかをお伺いします。あらかじめご了承ください。";
                     } else {
                         $memo->notice .= PHP_EOL."お手続きの際に、ネットワーク暗証番号・ご住所・ご連絡先番号のいずれかをお伺いします。あらかじめご了承ください。";
                     }
@@ -255,23 +284,22 @@ class MemoController extends Controller
             }
         } elseif($main_pattern == 3) {
             // 本人確認書類であれば、どれでもOK
-            $memo = new Memo();
             $memo->user_id = Auth::user()->id;
             $memo->procedure_id = $id;
             if(isset(Memo::$procedures[($id - 1)]['notice'])){
-                $memo->notice = Memo::$procedures[($id - 1)]['notice'];
+                $memo->notice .= PHP_EOL.Memo::$procedures[($id - 1)]['notice'];
             }
             $memo->save();
             if(is_null(UserLicense::where("user_id", Auth::user()->id)->first())){
                 if($request->input("nwpw") == 1 && $id == 8){
-                    $memo->notice = "現在のネットワーク暗証番号がお分かりでない場合にはお手続きをいただくことができません。あらかじめご了承ください。";
+                    $memo->notice .= PHP_EOL."現在のネットワーク暗証番号がお分かりでない場合にはお手続きをいただくことができません。あらかじめご了承ください。";
                     $memo->save();
                 } else {
                     $memo_license = new MemoLicense();
                     $memo_license->memo_id = $memo->id;
                     $memo_license->license_id = 99;
                     $memo_license->save();
-                    $memo->notice = "現在のネットワーク暗証番号がお分かりでない場合にはお手続きをいただくことができません。あらかじめご了承ください。";
+                    $memo->notice .= PHP_EOL."現在のネットワーク暗証番号がお分かりでない場合にはお手続きをいただくことができません。あらかじめご了承ください。";
                     $memo->save();
                 }
             } else {
@@ -287,17 +315,15 @@ class MemoController extends Controller
         } elseif($main_pattern == 5) {
             // 支払い用紙がある場合とない場合で処理を分岐
             if($request->input("payment-form") == 1){
-                $memo = new Memo();
                 $memo->user_id = Auth::user()->id;
                 $memo->procedure_id = $id;
-                $memo->notice = "お支払い用紙以外に、特にお持ちいただく書類はございません。ただし、お支払い用紙をお持ちではなかった場合にはお手続きができかねる場合がございます。あらかじめご了承ください。";
+                $memo->notice .= PHP_EOL."お支払い用紙以外に、特にお持ちいただく書類はございません。ただし、お支払い用紙をお持ちではなかった場合にはお手続きができかねる場合がございます。あらかじめご了承ください。";
                 $memo->save();
             } else {
-                $memo = new Memo();
                 $memo->user_id = Auth::user()->id;
                 $memo->procedure_id = $id;
                 if(count(Auth::user()->user_licenses) === 0){
-                    $memo->notice = "お支払いのみであれば、何もお持ちいただかなくても原則としてお手続きは可能です。しかし、場合によってはお支払い用紙もしくはご本人様確認書類が必要となります。あらかじめご了承ください。";
+                    $memo->notice .= PHP_EOL."お支払いのみであれば、何もお持ちいただかなくても原則としてお手続きは可能です。しかし、場合によってはお支払い用紙もしくはご本人様確認書類が必要となります。あらかじめご了承ください。";
                     $memo->save();
                 } else {
                     $memo->save();
@@ -310,20 +336,18 @@ class MemoController extends Controller
                 }
             }
         } elseif($main_pattern == 6) {
-            $memo = new Memo();
             $memo->user_id = Auth::user()->id;
             $memo->procedure_id = $id;
             if(isset(Memo::$procedures[($id - 1)]['notice'])){
-                $memo->notice = Memo::$procedures[($id - 1)]['notice'];
+                $memo->notice .= PHP_EOL.Memo::$procedures[($id - 1)]['notice'];
             }
             $memo->save();
-        } else {
+        } elseif($id < 23) {
             //シルバーは18歳、Goldは20歳が処理の分岐ポイント
-            $memo = new Memo();
             $memo->user_id = Auth::user()->id;
             $memo->procedure_id = $id;
             if(is_null(Auth::user()->user_licenses->first())){
-                $memo->notice = "申し訳ございませんが、クレジットカード・クレジットカード(Gold)のお申し込みにはご本人様確認書類が必ず必要になります。".PHP_EOL."詳しくはショップもしくはインフォメーションセンターでご確認ください。";
+                $memo->notice .= PHP_EOL."申し訳ございませんが、クレジットカード・クレジットカード(Gold)のお申し込みにはご本人様確認書類が必ず必要になります。".PHP_EOL."詳しくはショップもしくはインフォメーションセンターでご確認ください。";
                 $memo->save();
                 $memo_license = new MemoLicense();
                 $memo_license->memo_id = $memo->id;
@@ -332,7 +356,7 @@ class MemoController extends Controller
             } elseif($id == 21){
                 // シルバー
                 if($age < 18){
-                    $memo->notice = "申し訳ございませんが、17歳以下のお客様はクレジットカードをお申し込みいただくことができかねます。ご了承ください。";
+                    $memo->notice .= PHP_EOL."申し訳ございませんが、17歳以下のお客様はクレジットカードをお申し込みいただくことができかねます。ご了承ください。";
                     $memo->save();
                     $memo_license = new MemoLicense();
                     $memo_license->memo_id = $memo->id;
@@ -356,7 +380,7 @@ class MemoController extends Controller
                     }
                     // キャッシュカードを持っているかどうかで処理を分岐
                     if(is_null(UserPay::where("user_id", Auth::user()->id)->where("pay_id", 2)->first())){
-                        $memo->notice = "後日ご自宅に送付される口座振替用紙にて、クレジットカードの口座設定をしていただく必要がございます。当日口座設定をされたい場合は、ご自身名義の銀行口座のキャッシュカードをご用意ください。";
+                        $memo->notice .= PHP_EOL."後日ご自宅に送付される口座振替用紙にて、クレジットカードの口座設定をしていただく必要がございます。当日口座設定をされたい場合は、ご自身名義の銀行口座のキャッシュカードをご用意ください。";
                         $memo->save();
                     } else {
                         $memo_pay = new MemoPay();
@@ -367,9 +391,9 @@ class MemoController extends Controller
                     // 最後に、学生の場合の注意事項を追加して終了
                     if ($request->input("student") == 1){
                         if($memo->notice == null){
-                            $memo->notice = "学生のお客様がクレジットカードをお申し込みいただく場合、上記の書類に加えて学生証が必要となります。あらかじめご了承ください。";
+                            $memo->notice .= PHP_EOL."学生のお客様がクレジットカードをお申し込みいただく場合、上記の書類に加えて学生証が必要となります。あらかじめご了承ください。";
                         } else {
-                            $memo->notice = $memo->notice.PHP_EOL."学生のお客様がクレジットカードをお申し込みいただく場合、上記の書類に加えて学生証が必要となります。あらかじめご了承ください。";
+                            $memo->notice .= PHP_EOL."学生のお客様がクレジットカードをお申し込みいただく場合、上記の書類に加えて学生証が必要となります。あらかじめご了承ください。";
                         }
                         $memo->save();
                     }
@@ -377,14 +401,14 @@ class MemoController extends Controller
             } else {
                 // Gold
                 if ($request->input("student") == 1){
-                    $memo->notice = "申し訳ございませんが、学生のお客様はクレジットカード(Gold)をお申し込みいただくことができません。クレジットカード(シルバー）であれば、18歳以上のお客様はお申し込みいただくことができます。";
+                    $memo->notice .= PHP_EOL."申し訳ございませんが、学生のお客様はクレジットカード(Gold)をお申し込みいただくことができません。クレジットカード(シルバー）であれば、18歳以上のお客様はお申し込みいただくことができます。";
                     $memo->save();
                     $memo_license = new MemoLicense();
                     $memo_license->memo_id = $memo->id;
                     $memo_license->license_id = 99;
                     $memo_license->save();
                 } elseif ($age < 20){
-                    $memo->notice = "申し訳ございませんが、20歳未満のお客様はクレジットカード(Gold)をお申し込みいただくことができかねます。ご了承ください。";
+                    $memo->notice .= PHP_EOL."申し訳ございませんが、20歳未満のお客様はクレジットカード(Gold)をお申し込みいただくことができかねます。ご了承ください。";
                     $memo->save();
                     $memo_license = new MemoLicense();
                     $memo_license->memo_id = $memo->id;
@@ -410,9 +434,9 @@ class MemoController extends Controller
                     // キャッシュカードを持っているかどうかで処理を分岐
                     if(is_null(UserPay::where("user_id", Auth::user()->id)->where("pay_id", 2)->first())){
                         if($memo->notice == null){
-                            $memo->notice = "後日ご自宅に送付される口座振替用紙にて、クレジットカードの口座設定をしていただく必要がございます。当日口座設定をされたい場合は、ご自身名義の銀行口座のキャッシュカードをご用意ください。";
+                            $memo->notice .= PHP_EOL."後日ご自宅に送付される口座振替用紙にて、クレジットカードの口座設定をしていただく必要がございます。当日口座設定をされたい場合は、ご自身名義の銀行口座のキャッシュカードをご用意ください。";
                         } else {
-                            $memo->notice = $memo->notice.PHP_EOL."後日ご自宅に送付される口座振替用紙にて、クレジットカードの口座設定をしていただく必要がございます。当日口座設定をされたい場合は、ご自身名義の銀行口座のキャッシュカードをご用意ください。";
+                            $memo->notice .= PHP_EOL."後日ご自宅に送付される口座振替用紙にて、クレジットカードの口座設定をしていただく必要がございます。当日口座設定をされたい場合は、ご自身名義の銀行口座のキャッシュカードをご用意ください。";
                         }
                         $memo->save();
                     } else {
@@ -423,7 +447,50 @@ class MemoController extends Controller
                     }
                 }
             }
+        } else {
+            # dカードアップグレード
+            if(Auth::user()->is_corporation == false){
+                $memo->user_id = Auth::user()->id;
+                $memo->procedure_id = $id;
+                if($age < 20){
+                    $memo->notice .= PHP_EOL."申し訳ございませんが、19歳以下のお客様はクレジットカード(Gold)へのアップグレードをお申し込みいただくことができかねます。ご了承ください。";
+                    $memo->save();
+                    $memo_license = new MemoLicense();
+                    $memo_license->memo_id = $memo->id;
+                    $memo_license->license_id = 99;
+                    $memo_license->save();
+                }elseif($request->input("student") == 1){
+                    $memo->notice .= PHP_EOL."申し訳ございませんが、学生のお客様はクレジットカード(Gold)へのアップグレードをお申し込みいただくことができかねます。ご了承ください。";
+                    $memo->save();
+                    $memo_license = new MemoLicense();
+                    $memo_license->memo_id = $memo->id;
+                    $memo_license->license_id = 99;
+                    $memo_license->save();
+                }elseif(Auth::user()->user_licenses != null){
+                    $memo->save();
+                    foreach(Auth::user()->user_licenses as $user_license){
+                        $memo_license = new MemoLicense();
+                        $memo_license->memo_id = $memo->id;
+                        $memo_license->license_id = $user_license->license_id;
+                        $memo_license->save();
+                    }
+                }else{
+                    $memo->notice .= PHP_EOL."お手続きの際に、ネットワーク暗証番号・ご住所・ご連絡先番号のいずれかをお伺いします。あらかじめご了承ください。";
+                    $memo->save();
+                }
+            }
         }
+        # 最後に未成年契約者に対する同意書などについての注意を追加して終了
+        if(Auth::user()->is_corporation != true && $age < 20 && $request->input("parent") == 1 && ($id <= 4 || $id == 18 || $id == 21)){
+            $memo->notice .= PHP_EOL."未成年契約者の方が上記のお手続きをご希望の場合には、保護者の方がご来店されていても追加で以下の書類が必要になります。".PHP_EOL."・免許証や健康保険証などの、保護者の方のご本人様確認書類(原本）".PHP_EOL."・保護者の方にご記入いただいた同意書（ご記入から3ヶ月後の月末まで有効。店頭でご記入いただくことも可能です）。";
+        }elseif(Auth::user()->is_corporation != true && $age < 20 && $request->input("parent") == 2 && ($id <= 4 || $id == 18 || $id == 21)){
+            $memo->notice .= PHP_EOL."未成年契約者の方が上記のお手続きをご希望の場合で、保護者の方がご来店されない場合には追加で以下の書類が必要になります。".PHP_EOL."・免許証や健康保険証などの、保護者の方のご本人様確認書類(コピー可）".PHP_EOL."・保護者の方にご記入いただいた同意書（ご記入から3ヶ月後の月末が有効期限です）。";
+        }elseif(Auth::user()->is_corporation != true && $age < 20 && $request->input("parent") == 1 && ($id <= 11 || ($id >= 16 && $id <= 21))){
+            $memo->notice .= PHP_EOL."お客様のご契約に関して「都度同意」が設定されていた場合、保護者の方がご来店されていても追加で以下の書類が必要になります。".PHP_EOL."・免許証や健康保険証などの、保護者の方のご本人様確認書類(原本）".PHP_EOL."・保護者の方にご記入いただいた同意書（ご記入から3ヶ月後の月末まで有効。店頭でご記入いただくことも可能です）。";
+        }elseif(Auth::user()->is_corporation != true && $age < 20 && $request->input("parent") == 2 && ($id <= 11 || ($id >= 16 && $id <= 21))){
+            $memo->notice .= PHP_EOL."お客様のご契約に関して「都度同意」が設定されており保護者の方がご来店されない場合、追加で以下の書類が必要になります。".PHP_EOL."・免許証や健康保険証などの、保護者の方のご本人様確認書類(コピー可）".PHP_EOL."・保護者の方にご記入いただいた同意書（ご記入から3ヶ月後の月末まで有効です）。";
+        }
+        $memo->save();
         $user = Auth::user();
         return view("memos.store", compact("memo", "user"));
     }

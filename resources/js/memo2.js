@@ -27,7 +27,7 @@ $(document).on("change", "#procedure-select", function(){
 
 $(document).on("change", "#procedure-select", function(){
   var id = $('#procedure-select').val();
-  if(id == 21 || id == 22){
+  if(id == 21 || id == 22 || id == 23){
     $('#student').css("display", "block");
   } else {
     $('#student').css("display", "none");
