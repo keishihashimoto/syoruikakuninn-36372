@@ -13,11 +13,11 @@ email: test@test, password: 0000000a
 このアプリは、そのような状況を解決するべく、スマートフォンから手軽に必要書類を確認できるようにするために開発しました。
 ## DEMO
 #### 会員情報の確認
-[![Image from Gyazo](https://i.gyazo.com/76108235b5c3b083f9b3cf6aa13453fa.gif)](https://gyazo.com/76108235b5c3b083f9b3cf6aa13453fa)
+[![Image from Gyazo](https://i.gyazo.com/7d29e8e4963d4dbb6188d963f561e2ca.gif)](https://gyazo.com/7d29e8e4963d4dbb6188d963f561e2ca)
 #### 身分証明書の登録
-[![Image from Gyazo](https://i.gyazo.com/a3c5b1affd8dd11e19887e0a848fe5a4.gif)](https://gyazo.com/a3c5b1affd8dd11e19887e0a848fe5a4)
+[![Image from Gyazo](https://i.gyazo.com/b69c2a12073584d5d1f8d95d263f4c26.gif)](https://gyazo.com/b69c2a12073584d5d1f8d95d263f4c26)
 #### 手続きに必要な書類の確認
-[![Image from Gyazo](https://i.gyazo.com/8668c91129783b344ac4acbc1588895a.gif)](https://gyazo.com/8668c91129783b344ac4acbc1588895a)
+[![Image from Gyazo](https://i.gyazo.com/87b1c594b23242c8cc94890de20efe8b.gif)](https://gyazo.com/87b1c594b23242c8cc94890de20efe8b)
 ## 工夫したポイント
 スマートフォンのような、画面の小さなデバイスでも使いやすいようにデザインに拘りました。
 webアプリケーションでは、まずPCからのアクセスを第一に想定しているものも多いと思います。
