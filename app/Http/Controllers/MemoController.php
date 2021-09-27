@@ -53,7 +53,7 @@ class MemoController extends Controller
             $memo->user_id = Auth::user()->id;
             $memo->procedure_id = $id;
             if((Auth::user()->user_licenses->first() == null) || Auth::user()->user_pays->first() == null){
-                $memo->notice = "ご本人様確認書類もしくはお支払い設定できるものをお持ちでない場合には、上記のお手続きをいただくことはできません。".PHP_EOL."他にお手続きいただける書類がないかどうか、ご自身以外の方の口座などでのお支払い設定が可能かどうかにつきましては、ドコモショップまたはドコモインフォメーションセンターにてお問い合わせください。";
+                $memo->notice = "ご本人様確認書類もしくはお支払い設定できるものをお持ちでない場合には、上記のお手続きをいただくことはできません。".PHP_EOL."他にお手続きいただける書類がないかどうか、ご自身以外の方の口座などでのお支払い設定が可能かどうかにつきましては、ショップまたはインフォメーションセンターにてお問い合わせください。";
                 $memo->save();
                 $memo_license = new MemoLicense();
                 $memo_license->memo_id = $memo->id;
@@ -109,7 +109,7 @@ class MemoController extends Controller
                     $memo_license->memo_id = $memo->id;
                     $memo_license->license_id = 99;
                     $memo_license->save();
-                    $memo->notice = "住基カードと通帳＋印鑑でのお手続きに関しては、お客様ご自身のお名前の入った補助書類が必要です。".PHP_EOL."住民票や公共料金の領収証などをご用意いただきますようお願いいたします。".PHP_EOL."他にお手続きが可能な方法があるかにつきましては、ドコモショップもしくはドコモインフォメーションセンターにてご確認ください。";
+                    $memo->notice = "住基カードと通帳＋印鑑でのお手続きに関しては、お客様ご自身のお名前の入った補助書類が必要です。".PHP_EOL."住民票や公共料金の領収証などをご用意いただきますようお願いいたします。".PHP_EOL."他にお手続きが可能な方法があるかにつきましては、ショップもしくはインフォメーションセンターにてご確認ください。";
                     $memo->save();
                 }
             } else {
@@ -217,7 +217,7 @@ class MemoController extends Controller
                         $memo_license->save();
                     }
                 } else {
-                    $memo->notice = "分割のご希望：あり。".PHP_EOL."申し訳ございませんが、ご本人様確認書類をお持ちでない場合には、分割でのお手続きは致しかねます。".PHP_EOL."ただし、ご自身名義のクレジットカードかキャッシュカードをお持ちの場合には、ネットワーク暗証番号・御生年月日・ご住所のいずれかを御申告いただくことでご対応可能です。".PHP_EOL."詳しくは、ドコモショップまたはドコモインフォメーションセンターにお問い合わせください。";
+                    $memo->notice = "分割のご希望：あり。".PHP_EOL."申し訳ございませんが、ご本人様確認書類をお持ちでない場合には、分割でのお手続きは致しかねます。".PHP_EOL."ただし、ご自身名義のクレジットカードかキャッシュカードをお持ちの場合には、ネットワーク暗証番号・御生年月日・ご住所のいずれかを御申告いただくことでご対応可能です。".PHP_EOL."詳しくは、ショップまたインフォメーションセンターにお問い合わせください。";
                     $memo->save();
                     $memo_license = new MemoLicense();
                     $memo_license->memo_id = $memo->id;
@@ -323,7 +323,7 @@ class MemoController extends Controller
             $memo->user_id = Auth::user()->id;
             $memo->procedure_id = $id;
             if(is_null(Auth::user()->user_licenses->first())){
-                $memo->notice = "申し訳ございませんが、dカード・dカードGoldのお申し込みにはご本人様確認書類が必ず必要になります。".PHP_EOL."詳しくはドコモショップもしくはドコモインフォメーションセンターでご確認ください。";
+                $memo->notice = "申し訳ございませんが、クレジットカード・クレジットカード(Gold)のお申し込みにはご本人様確認書類が必ず必要になります。".PHP_EOL."詳しくはショップもしくはインフォメーションセンターでご確認ください。";
                 $memo->save();
                 $memo_license = new MemoLicense();
                 $memo_license->memo_id = $memo->id;
@@ -332,7 +332,7 @@ class MemoController extends Controller
             } elseif($id == 21){
                 // シルバー
                 if($age < 18){
-                    $memo->notice = "申し訳ございませんが、17歳以下のお客様はdカードをお申し込みいただくことができかねます。ご了承ください。";
+                    $memo->notice = "申し訳ございませんが、17歳以下のお客様はクレジットカードをお申し込みいただくことができかねます。ご了承ください。";
                     $memo->save();
                     $memo_license = new MemoLicense();
                     $memo_license->memo_id = $memo->id;
@@ -356,7 +356,7 @@ class MemoController extends Controller
                     }
                     // キャッシュカードを持っているかどうかで処理を分岐
                     if(is_null(UserPay::where("user_id", Auth::user()->id)->where("pay_id", 2)->first())){
-                        $memo->notice = "後日ご自宅に送付される口座振替用紙にて、dカードの口座設定をしていただく必要がございます。当日口座設定をされたい場合は、ご自身名義の銀行口座のキャッシュカードをご用意ください。";
+                        $memo->notice = "後日ご自宅に送付される口座振替用紙にて、クレジットカードの口座設定をしていただく必要がございます。当日口座設定をされたい場合は、ご自身名義の銀行口座のキャッシュカードをご用意ください。";
                         $memo->save();
                     } else {
                         $memo_pay = new MemoPay();
@@ -367,9 +367,9 @@ class MemoController extends Controller
                     // 最後に、学生の場合の注意事項を追加して終了
                     if ($request->input("student") == 1){
                         if($memo->notice == null){
-                            $memo->notice = "学生のお客様がdカードをお申し込みいただく場合、上記の書類に加えて学生証が必要となります。あらかじめご了承ください。";
+                            $memo->notice = "学生のお客様がクレジットカードをお申し込みいただく場合、上記の書類に加えて学生証が必要となります。あらかじめご了承ください。";
                         } else {
-                            $memo->notice = $memo->notice.PHP_EOL."学生のお客様がdカードをお申し込みいただく場合、上記の書類に加えて学生証が必要となります。あらかじめご了承ください。";
+                            $memo->notice = $memo->notice.PHP_EOL."学生のお客様がクレジットカードをお申し込みいただく場合、上記の書類に加えて学生証が必要となります。あらかじめご了承ください。";
                         }
                         $memo->save();
                     }
@@ -377,14 +377,14 @@ class MemoController extends Controller
             } else {
                 // Gold
                 if ($request->input("student") == 1){
-                    $memo->notice = "申し訳ございませんが、学生のお客様はdカードGoldをお申し込みいただくことができません。dカード(シルバー）であれば、18歳以上のお客様はお申し込みいただくことができます。";
+                    $memo->notice = "申し訳ございませんが、学生のお客様はクレジットカード(Gold)をお申し込みいただくことができません。クレジットカード(シルバー）であれば、18歳以上のお客様はお申し込みいただくことができます。";
                     $memo->save();
                     $memo_license = new MemoLicense();
                     $memo_license->memo_id = $memo->id;
                     $memo_license->license_id = 99;
                     $memo_license->save();
                 } elseif ($age < 20){
-                    $memo->notice = "申し訳ございませんが、20歳未満のお客様はdカードGoldをお申し込みいただくことができかねます。ご了承ください。";
+                    $memo->notice = "申し訳ございませんが、20歳未満のお客様はクレジットカード(Gold)をお申し込みいただくことができかねます。ご了承ください。";
                     $memo->save();
                     $memo_license = new MemoLicense();
                     $memo_license->memo_id = $memo->id;
@@ -410,9 +410,9 @@ class MemoController extends Controller
                     // キャッシュカードを持っているかどうかで処理を分岐
                     if(is_null(UserPay::where("user_id", Auth::user()->id)->where("pay_id", 2)->first())){
                         if($memo->notice == null){
-                            $memo->notice = "後日ご自宅に送付される口座振替用紙にて、dカードの口座設定をしていただく必要がございます。当日口座設定をされたい場合は、ご自身名義の銀行口座のキャッシュカードをご用意ください。";
+                            $memo->notice = "後日ご自宅に送付される口座振替用紙にて、クレジットカードの口座設定をしていただく必要がございます。当日口座設定をされたい場合は、ご自身名義の銀行口座のキャッシュカードをご用意ください。";
                         } else {
-                            $memo->notice = $memo->notice.PHP_EOL."後日ご自宅に送付される口座振替用紙にて、dカードの口座設定をしていただく必要がございます。当日口座設定をされたい場合は、ご自身名義の銀行口座のキャッシュカードをご用意ください。";
+                            $memo->notice = $memo->notice.PHP_EOL."後日ご自宅に送付される口座振替用紙にて、クレジットカードの口座設定をしていただく必要がございます。当日口座設定をされたい場合は、ご自身名義の銀行口座のキャッシュカードをご用意ください。";
                         }
                         $memo->save();
                     } else {

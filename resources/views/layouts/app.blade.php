@@ -94,19 +94,19 @@
         </main>
         <div class="container-fluid">
             <div class="row alert alert-secondary mb-0">
-                <div class="col-12 col-sm-8 d-flex align-items-center">お問い合わせは<br class="d-inline d-sm-none">ドコモインフォメーションセンターへ</div>
+                <div class="col-12 col-sm-8 d-flex align-items-center">お問い合わせは<br class="d-inline d-sm-none">インフォメーションセンターへ</div>
                 <div class="col-12 col-sm-4 col-rows-1 col-rows-xl-2">
                     <div class="d-flex flex-row justify-content-between">
                         <div>
                             <i class="fas fa-phone fa-fw"></i><span class="d-none d-md-inline">お問い合わせ</span>
                         </div>
-                        <div>0120-800-000</div>
+                        <div>0120-xxx-xxx</div>
                     </div>
                     <div class="d-flex flex-row justify-content-between">
                         <div>
                             <i class="far fa-clock fa-fw"></i><span class="d-none d-md-inline">営業時間</span>
                         </div>
-                        <div>9:00~20:00</div>
+                        <div>xx:00~xx:00</div>
                     </div>
                 </div>
             </div>

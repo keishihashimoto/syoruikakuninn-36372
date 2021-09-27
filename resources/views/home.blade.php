@@ -43,7 +43,7 @@
             <li class="list-group-item">特に指定がある場合を除き、ご本人様確認書類は現住所記載かつ有効期限内であること、補助書類は発行から3ヶ月以内である必要がございます。</li>
             <li class="list-group-item">作成されるメモは、メモ作成時点でご登録いただいている書類・お客さま情報に基づくものになります。</li>
             <li class="list-group-item">現在、当サイトでは未成年契約者の方のお手続きには対応していません。あらかじめご了承ください。</li>
-            <li class="list-group-item">ご不明な点につきましてはドコモショップまたはドコモインフォメーションセンターにお問い合わせください</li>
+            <li class="list-group-item">ご不明な点につきましてはショップまたはインフォメーションセンターにお問い合わせください</li>
         </ul>
     </div>
 
@@ -57,7 +57,7 @@
                         </button>
                     </div>
                     <div id="collapseOne" class="accordion-collapse collapse" aria-labelledby="headingOne" data-parent="#accordion">
-                        <div class="accordion-body pl-4 mt-2 mb-1">お手数ですが、ドコモショップもしくはドコモインフォメーションセンターにてお問い合わせください。</div>
+                        <div class="accordion-body pl-4 mt-2 mb-1">お手数ですが、ショップもしくインフォメーションセンターにてお問い合わせください。</div>
                     </div>
                 </div>
                 <div class="accordion-item">
@@ -67,7 +67,7 @@
                         </button>
                     </div>
                     <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-parent="#accordion">
-                        <div class="accordion-body pl-4 mt-2 mb-1">当サイトでご確認いただけるお手続き内容に関しては、順次追加予定です。<br>現時点で選択できないお手続き内容に関しては、お手数ですがドコモショップまたはドコモインフォメーションセンターにてご確認ください。</div>
+                        <div class="accordion-body pl-4 mt-2 mb-1">当サイトでご確認いただけるお手続き内容に関しては、順次追加予定です。<br>現時点で選択できないお手続き内容に関しては、お手数ですがショップまたはインフォメーションセンターにてご確認ください。</div>
                     </div>
                 </div>
                 <div class="accordion-item">
