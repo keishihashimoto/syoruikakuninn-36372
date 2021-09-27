@@ -42,8 +42,8 @@
         <ul class="list-group list-group-flush">
             <li class="list-group-item">特に指定がある場合を除き、ご本人様確認書類は現住所記載かつ有効期限内であること、補助書類は発行から3ヶ月以内である必要がございます。</li>
             <li class="list-group-item">作成されるメモは、メモ作成時点でご登録いただいている書類・お客さま情報に基づくものになります。</li>
-            <li class="list-group-item">現在、当サイトでは未成年契約者の方のお手続きには対応していません。あらかじめご了承ください。</li>
-            <li class="list-group-item">ご不明な点につきましてはショップまたはインフォメーションセンターにお問い合わせください</li>
+            <li class="list-group-item">作成されたメモに関しましては、注意事項欄をよくお読みいただくようにお願いいたします。</li>
+            <li class="list-group-item">ご不明な点につきましてはショップまたはインフォメーションセンターにお問い合わせください。</li>
         </ul>
     </div>
 
