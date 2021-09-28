@@ -1,10 +1,10 @@
-const { functionsIn } = require("lodash");
+const { functionsIn, find } = require("lodash");
 
 $(document).on("change", '#procedure-select', function(){
   var id = $('#procedure-select').val();
   if(id == 8){
     $('#nwpw').css("display", "block");
-    $("#nwpw-ok").prop("checked", true)
+    $("#nwpw-ng").prop("checked", true)
   } else {
     $('#nwpw').css("display", "none");
     $("#nwpw").find("input[type='input']:checked").prop("checked", false)
@@ -74,5 +74,24 @@ jQuery(function($){
       $('#agentNot').prop("checked", true)
     }
   })
-  $('')
+  $('#procedure-select').on("change", function(){
+    var id = $("#procedure-select").val()
+    if(id == 10 || id == 11){
+      $('#sim').css("display", "block")
+      $("#sim-ok").prop("checked", true)
+    }else{
+      $('#sim').css("display", "none")
+      $('#sim').find("input[type='radio']:checked").prop("checked", false)
+    }
+  })
+  $('#sim').find("input[type='radio']").on("change", function(){
+    var sim = $("#sim").find("input:checked").val();
+    if(sim == 2){
+      $('#nwpw').css("display", "block");
+      $("#nwpw-ng").prop("checked", true)
+    }else{
+      $('#nwpw').css("display", "none");
+      $("#nwpw").find("input[type='input']:checked").prop("checked", false)
+    }
+  })
 });

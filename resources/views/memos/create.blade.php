@@ -102,6 +102,18 @@
       </div>
     </div>
 
+    <div id="sim" style="display: none;">
+      <div class="fs-2 alert alert-danger">今回お手続きされる回線のSIMカードをお持ちいただくことは可能ですか？<br class="d-inline d-sm-none">SIMカードを取り出していただく必要はございません。本体に入ったままで大丈夫です。</div>
+      <div class="form-check form-group px-5">
+        <input type="radio" class="form-check-input" id="sim-ok" name="sim" value="1" checked>
+        <label for="sim-ok" class="form-check-label">SIMカードを持参可能</label>
+      </div>
+      <div class="form-check form-group px-5">
+        <input type="radio" class="form-check-input" id="sim-ng" name="sim" value="2">
+        <label for="sim-ng" class="form-check-label">SIMカードは持参できない</label>
+      </div>
+    </div>
+
     <div id="nwpw" style="display: none;">
       <div class="fs-6 mt-2 alert alert-danger">ネットワーク暗証番号がお分かりかどうかを以下からお選びください<br class="d-inline d-sm-none">（未選択の場合は番号がお分かりでないとして扱われます）</div>
       <div>

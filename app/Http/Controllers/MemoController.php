@@ -76,6 +76,21 @@ class MemoController extends Controller
             $memo->notice .= PHP_EOL."保護者の方の来店：なし。";
         }
         # 同意書などについての諸注意は、memoの最後に追加
+
+        # 紛失・解約の場合はSIMカードの持参可否をメモの最初に追加
+        if(($id == 10 || $id == 11) && $request->input("sim") == 1){
+            $memo->notice .= PHP_EOL."SIMカードのご持参：可能";
+        }elseif($id == 10 || $id == 11){
+            $memo->notice .= PHP_EOL."SIMカードのご持参：不可能";
+        }
+
+        # nwpwがわかるかどうかもメモに追加
+        if($request->input("nwpw") != null && $request->input("nwpw") == 1){
+            $memo->notice .= PHP_EOL."ネットワーク暗証番号：分かる";
+        }elseif($request->input("nwpw") != null){
+            $memo->notice .= PHP_EOL."ネットワーク暗証番号：分からない・不安である";
+        }
+
         # 手続きのパターンによって処理を分岐
         $main_pattern = Memo::$procedures[($id - 1)]["main_pattern"];
         if($main_pattern == 1){
@@ -252,6 +267,47 @@ class MemoController extends Controller
                     $memo_license->license_id = 99;
                     $memo_license->save();
                 }
+            } elseif($id == 10 || $id == 11){
+                // 紛失・解約は処理を分岐
+                // SIMありの場合は必要書類なし
+                // nwpwか生年月日を確認
+                if($request->input("sim") == 1){
+                    $memo->notice .= PHP_EOL."お手続きの際に、ネットワーク暗証番号・ご住所・ご連絡先番号のいずれかをお伺いします。あらかじめご了承ください。";
+                    if(isset(Memo::$procedures[($id - 1)]['notice'])){
+                        $memo->notice .= PHP_EOL.Memo::$procedures[($id - 1)]['notice'];   
+                    }
+                    $memo->save();
+                }elseif($request->input("nwpw") == 1){
+                    # simなしでもnwpwがわかれば必要書類なし
+                    $memo->notice .= PHP_EOL."お手続きの際にお伺いするネットワーク暗証番号に誤りがあった場合にはお手続きができかねます。".PHP_EOL."ご不安な場合には、念のため運転免許証・健康保険証・個人番号カードなどのご本人様確認できるものをお持ちいただくようにお願いいたします。";
+                    if(isset(Memo::$procedures[($id - 1)]['notice'])){
+                        $memo->notice .= PHP_EOL.Memo::$procedures[($id - 1)]['notice'];   
+                    }
+                    $memo->save();
+                }elseif(Auth::user()->user_licenses->first() != null){
+                    # simもnwpwもngの場合には書類が必要
+                    if(isset(Memo::$procedures[($id - 1)]['notice'])){
+                        $memo->notice .= PHP_EOL.Memo::$procedures[($id - 1)]['notice'];   
+                    }
+                    $memo->save();
+                    foreach(Auth::user()->user_licenses as $user_license){
+                        $memo_license = new MemoLicense();
+                        $memo_license->memo_id = $memo->id;
+                        $memo_license->license_id = $user_license->license_id;
+                        $memo_license->save();
+                    }
+                }else{
+                    
+                    $memo->notice .= PHP_EOL."上記のお手続きには、以下のいずれかが必ず必要になります。".PHP_EOL."・お手続きされる回線のSIMカード".PHP_EOL."・ご契約者ご本人様の本人確認書類（運転免許証や健康保険証、個人番号カードなど）".PHP_EOL."・ネットワーク暗証番号".PHP_EOL."ご了承ください。";
+                    if(isset(Memo::$procedures[($id - 1)]['notice'])){
+                        $memo->notice .= PHP_EOL.Memo::$procedures[($id - 1)]['notice'];   
+                    }
+                    $memo->save();
+                    $memo_license = new MemoLicense();
+                    $memo_license->memo_id = $memo->id;
+                    $memo_license->license_id = 99;
+                    $memo_license->save();
+                }
             } else {
                 if($id == 4){
                     $memo->notice .= PHP_EOL."分割のご希望：なし。";
@@ -261,8 +317,7 @@ class MemoController extends Controller
                         $memo->notice .= PHP_EOL.Memo::$procedures[($id - 1)]['notice'];
                     } else {
                         $memo->notice .= PHP_EOL.Memo::$procedures[($id - 1)]['notice'];
-                    }
-                    
+                    }   
                 }
                 if(UserLicense::where("user_id", Auth::user()->id)->first() != null){
                     $memo->save();
