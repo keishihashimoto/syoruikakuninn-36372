@@ -28,6 +28,54 @@
       </select>
     </div>
 
+    <div id="comer" style="display: none;">
+      <div class="fs-2 alert alert-danger">今回のお手続きで契約者ご本人様はご来店されますか？<br class="d-inline d-sm-none">（未選択の場合はご本人様ご来店として扱われます）</div>
+      <div class="form-check form-group px-5">
+        <input type="radio" class="form-check-input comer" id="comer-self" name="comer" value="1">
+        <label for="comer-self" class="form-check-label">契約者本人は来店する</label>
+      </div>
+      <div class="form-check form-group px-5">
+        <input type="radio" class="form-check-input comer" id="comer-not-self" name="comer" value="2">
+        <label for="comer-not-self" class="form-check-label">契約者本人は来店しない</label>
+      </div>
+    </div>
+
+    <div id="relation" style="display: none;">
+      <div class="fs-2 alert alert-danger">今回ご来店される方と契約者の方のご関係をお選びください<br class="d-inline d-sm-none">（未選択の場合は「同一住所の方」として扱われます）</div>
+      <div class="form-check form-group px-5">
+        <input type="radio" class="form-check-input" id="sameAddress" name="relation" value="1">
+        <label for="sameAddress" class="form-check-label">契約者の方と同一住所</label>
+      </div>
+      <div class="form-check form-group px-5">
+        <input type="radio" class="form-check-input" id="sameFamilyName" name="relation" value="2">
+        <label for="sameFamilyName" class="form-check-label">同一住所ではないが名字は同じ</label>
+      </div>
+      <div class="form-check form-group px-5">
+        <input type="radio" class="form-check-input" id="family" name="relation" value="3">
+        <label for="family" class="form-check-label">名字・住所ともに異なるが、親族関係にある<br class="d-inline d-sm-none">（住民票などで続柄が証明できる場合にはこちらをお選びください）。</label>
+      </div>
+      <div class="form-check form-group px-5">
+        <input type="radio" class="form-check-input" id="notFamily" name="relation" value="4">
+        <label for="notFamily" class="form-check-label">名字・住所ともに異なる。親族関係ではない。<br class="d-inline d-sm-none">（住民票などで続柄が証明できない場合にはこちらをお選びください）。</label>
+      </div>
+    </div>
+
+    <div id="agent" style="display: none;">
+      <div class="fs-2 alert alert-danger">今回のお手続きでご来店される方は、ご自身名義のドコモ回線のご契約をお持ちですか？<br class="d-inline d-sm-none">（未選択の場合はお持ちでないとして扱われます）</div>
+      <div class="form-check form-group px-5">
+        <input type="radio" class="form-check-input comer" id="agentFamily" name="agent" value="1">
+        <label for="agentFamily" class="form-check-label">ドコモの契約があり、今回手続きをする回線とファミリー割引グループ・一括請求グループを両方とも組んでいる。</label>
+      </div>
+      <div class="form-check form-group px-5">
+        <input type="radio" class="form-check-input comer" id="agentDocomo" name="agent" value="2">
+        <label for="agentDocomo" class="form-check-label">ドコモの契約があるものの、今回手続きをする回線とはファミリー割引グループ・一括請求グループのどちらかもしくは両方を組んでいない。</label>
+      </div>
+      <div class="form-check form-group px-5">
+        <input type="radio" class="form-check-input comer" id="agentNot" name="agent" value="3">
+        <label for="agentNot" class="form-check-label">ドコモの契約を持っていない。</label>
+      </div>
+    </div>
+
     @if(Auth::user()->is_corporation == false && $age < 20)
       <div id="parent">
         <div class="fs-2 alert alert-danger">保護者の方が同時にご来店されるかどうかお選びください<br class="d-inline d-md-none">（未選択の場合はご来店なしとして扱われます）</div>

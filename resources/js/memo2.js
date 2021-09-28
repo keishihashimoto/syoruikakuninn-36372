@@ -1,3 +1,5 @@
+const { functionsIn } = require("lodash");
+
 $(document).on("change", '#procedure-select', function(){
   var id = $('#procedure-select').val();
   if(id == 8){
@@ -32,4 +34,27 @@ $(document).on("change", "#procedure-select", function(){
   } else {
     $('#student').css("display", "none");
   }
+});
+
+
+jQuery(function($){
+  $('#procedure-select').on("change", function(){
+    var id = $('#procedure-select').val();
+    console.log(id);
+    if(id < 13 || id > 15){
+      $("#comer").css("display", "block");
+    }else{
+      $("#comer").css("display", "none");
+    }
+  })
+  $(".comer").on("change", function(){
+    var comer = $(".comer:checked").val()
+    if(comer == 1){
+      $('#relation').css("display", "none")
+      $('#agent').css("display", "none")
+    }else{
+      $('#relation').css("display", "block")
+      $('#agent').css("display", "block")
+    }
+  })
 });
