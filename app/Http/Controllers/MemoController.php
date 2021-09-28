@@ -34,7 +34,6 @@ class MemoController extends Controller
     }
 
     public function store(Request $request){
-        
         $rules = [
             "procedure-select" => ["required", "integer"]
         ];
