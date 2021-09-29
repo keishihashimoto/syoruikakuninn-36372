@@ -64,12 +64,30 @@ class MemoController extends Controller
         }elseif(Auth::user()->is_corporation !== 1){
             $memo->notice .= PHP_EOL."学生のお客様ではありません";
         }
+        $id = $request->input("procedure-select");
+        # 来店者の情報をメモの追加
+        if($id < 13 || $id > 15){
+            if($request->input("comer") == 1){
+                $memo->notice .= PHP_EOL."来店者：契約者ご本人様";
+            }elseif($request->input("relation") == 1 && ($request->input("agent") == 1 || $request->input("agent") == 2)){
+                $memo->notice .= PHP_EOL."来店者：契約者以外の方（同一住所・ドコモ回線あり）";
+            }elseif($request->input("relation") == 1){
+                $memo->notice .= PHP_EOL."来店者：契約者以外の方（同一住所・ドコモ回線なし）";
+            }elseif(($request->input("relation") == 2 || $request->input("relation") == 3) && ($request->input("agent") == 1 || $request->input("agent") == 2)){
+                $memo->notice .= PHP_EOL."来店者：契約者以外の方（同一住所ではないご家族の方・ドコモ回線あり）";
+            }elseif($request->input("relation") == 2 || $request->input("relation") == 3){
+                $memo->notice .= PHP_EOL."来店者：契約者以外の方（同一住所ではないご家族の方・ドコモ回線なし）";
+            }elseif($request->input("relation") == 4 && ($request->input("agent") == 1 || $request->input("agent") == 2)){
+                $memo->notice .= PHP_EOL."来店者：契約者以外の方（ご家族の方以外・ドコモ回線あり）";
+            }elseif($request->input("relation") == 4){
+                $memo->notice .= PHP_EOL."来店者：契約者以外の方（ご家族の方以外・ドコモ回線なし）";
+            }
+        }
         # 一部の手続きに関しては、未成年限定で注意事項を追加
         # 最初に、保護者の同時来店の有無を記載
         # 対象の手続きは、都度同意かどうかによらないものが1 ~ 4, 18, 21
         # 都度同意の場合だと同意書などが必要になるのが5 ~ 11, 16, 17, 19, 20
         # 最初に、保護者の同時来店の有無をメモに追加
-        $id = $request->input("procedure-select");
         if(Auth::user()->is_corporation != true && $age < 20 && $request->input("parent") == 1 && ($id <= 11 || ($id >= 16 && $id <= 21))){
             $memo->notice .= PHP_EOL."保護者の方の来店：あり。";
         }elseif(Auth::user()->is_corporation != true && $age < 20 && $request->input("parent") == 2 && ($id <= 11 || ($id >= 16 && $id <= 21))){
@@ -272,7 +290,7 @@ class MemoController extends Controller
                 // SIMありの場合は必要書類なし
                 // nwpwか生年月日を確認
                 if($request->input("sim") == 1){
-                    $memo->notice .= PHP_EOL."お手続きの際に、ネットワーク暗証番号・ご住所・ご連絡先番号のいずれかをお伺いします。あらかじめご了承ください。";
+                    $memo->notice .= PHP_EOL."お手続きの際に、ご契約者様のネットワーク暗証番号・ご住所・ご連絡先番号・ご生年月日のいずれかをお伺いします（契約者ご本人様以外がご来店されている場合には、ネットワーク暗証番号はお伺いしません）。あらかじめご了承ください。";
                     if(isset(Memo::$procedures[($id - 1)]['notice'])){
                         $memo->notice .= PHP_EOL.Memo::$procedures[($id - 1)]['notice'];   
                     }
@@ -329,9 +347,9 @@ class MemoController extends Controller
                     }
                 } else {
                     if($memo->notice == null){
-                        $memo->notice .= PHP_EOL."お手続きの際に、ネットワーク暗証番号・ご住所・ご連絡先番号のいずれかをお伺いします。あらかじめご了承ください。";
+                        $memo->notice .= PHP_EOL."お手続きの際に、ご契約者様のネットワーク暗証番号・ご住所・ご連絡先番号・ご生年月日のいずれかをお伺いします（契約者ご本人様以外がご来店されている場合には、ネットワーク暗証番号はお伺いしません）。あらかじめご了承ください。";
                     } else {
-                        $memo->notice .= PHP_EOL."お手続きの際に、ネットワーク暗証番号・ご住所・ご連絡先番号のいずれかをお伺いします。あらかじめご了承ください。";
+                        $memo->notice .= PHP_EOL."お手続きの際に、ご契約者様のネットワーク暗証番号・ご住所・ご連絡先番号・ご生年月日のいずれかをお伺いします（契約者ご本人様以外がご来店されている場合には、ネットワーク暗証番号はお伺いしません）。あらかじめご了承ください。";
                     }
                     $memo->save();
                 }
@@ -529,12 +547,12 @@ class MemoController extends Controller
                         $memo_license->save();
                     }
                 }else{
-                    $memo->notice .= PHP_EOL."お手続きの際に、ネットワーク暗証番号・ご住所・ご連絡先番号のいずれかをお伺いします。あらかじめご了承ください。";
+                    $memo->notice .= PHP_EOL."お手続きの際に、ご契約者様のネットワーク暗証番号・ご住所・ご連絡先番号・ご生年月日のいずれかをお伺いします。あらかじめご了承ください。";
                     $memo->save();
                 }
             }
         }
-        # 最後に未成年契約者に対する同意書などについての注意を追加して終了
+        # 未成年契約者に対する同意書などについての注意を追加
         if(Auth::user()->is_corporation != true && $age < 20 && $request->input("parent") == 1 && ($id <= 4 || $id == 18 || $id == 21)){
             $memo->notice .= PHP_EOL."未成年契約者の方が上記のお手続きをご希望の場合には、保護者の方がご来店されていても追加で以下の書類が必要になります。".PHP_EOL."・免許証や健康保険証などの、保護者の方のご本人様確認書類(原本）".PHP_EOL."・保護者の方にご記入いただいた同意書（ご記入から3ヶ月後の月末まで有効。店頭でご記入いただくことも可能です）。";
         }elseif(Auth::user()->is_corporation != true && $age < 20 && $request->input("parent") == 2 && ($id <= 4 || $id == 18 || $id == 21)){
@@ -544,6 +562,60 @@ class MemoController extends Controller
         }elseif(Auth::user()->is_corporation != true && $age < 20 && $request->input("parent") == 2 && ($id <= 11 || ($id >= 16 && $id <= 21))){
             $memo->notice .= PHP_EOL."お客様のご契約に関して「都度同意」が設定されており保護者の方がご来店されない場合、追加で以下の書類が必要になります。".PHP_EOL."・免許証や健康保険証などの、保護者の方のご本人様確認書類(コピー可）".PHP_EOL."・保護者の方にご記入いただいた同意書（ご記入から3ヶ月後の月末まで有効です）。";
         }
+        $memo->save();
+
+        # 契約者本人が来店しない場合の注意事項
+        if($request->input("comer") == 2){
+            if(($id == 4 && $request->input("loan") == 2) || $id == 5 || $id == 7|| ($id >= 18 && $id <= 20)){
+                # 家族受付の場合の注意事項
+                if($request->input("relation") == 1 && ($request->input("agent") == 1 || $request->input("agent") == 2)){
+                    $memo->notice .= PHP_EOL."契約者以外の方がご来店の上で上記のお手続きをいただくにあたり、追加で必要な書類は特にございません。".PHP_EOL."しかし、ご契約者様とご来店者様のご登録住所が異なる場合にはお手続きができなくなる可能性があります。".PHP_EOL."ご不安であればご契約者様とご来店者様双方のご本人様確認書類（運転免許証・健康保険証・個人番号カードなど）をお持ちいただくようにお願いいたします。";
+                }elseif($request->input("relation") == 1){
+                    $memo->notice .= PHP_EOL."契約者以外の方がご来店の上で上記のお手続きをいただくにあたり、ご来店者様のご本人様確認書類（運転免許証・健康保険証・個人番号カードなど）が必要になります。".PHP_EOL."また、ご契約者様のご登録住所、ご来店者様のご本人様確認書類のものと異なる場合にはお手続きができなくなる可能性があります。".PHP_EOL."ご不安であればご契約者様のご本人様確認書類（運転免許証・健康保険証・個人番号カードなど）を追加でお持ちいただくようにお願いいたします。";
+                }elseif(($request->input("relation") == 2 || $request->input("relation") == 3) && ($request->input("agent") == 1 || $request->input("agent") == 2)){
+                    $memo->notice .= PHP_EOL."契約者以外の方がご来店の上で上記のお手続きをいただくにあたり、以下のいずれかが必要になります。".PHP_EOL."・ご来店者様とご契約者様の続柄記載のある住民票や戸籍謄本など".PHP_EOL."・ご契約様にご記入いただいた委任状（ご記入から3ヶ月後の月末まで有効です）".PHP_EOL."・お手続きの際にショップからご契約者様にお電話確認をさせていただく（お出にならなかった場合にはお手続きをすることはできません）".PHP_EOL."上記いずれかをご準備、もしくは可能な状態にしていただくようにお願いいたします。";
+                }elseif($request->input("relation") == 2 || $request->input("relation") == 3){
+                    $memo->notice .= PHP_EOL."契約者以外の方がご来店の上で上記のお手続きをいただくにあたり、ご来店者様のご本人様確認書類（運転免許証・健康保険証・個人番号カードなど）が必要になります。".PHP_EOL."また、追加で以下のいずれかが必要になります。".PHP_EOL."・ご来店者様とご契約者様の続柄記載のある住民票や戸籍謄本など".PHP_EOL."・ご契約様にご記入いただいた委任状（ご記入から3ヶ月後の月末まで有効です）".PHP_EOL."・お手続きの際にショップからご契約者様にお電話確認をさせていただく（お出にならなかった場合にはお手続きをすることはできません）".PHP_EOL."上記いずれかをご準備、もしくは可能な状態にしていただくようにお願いいたします。";
+                }
+                $memo->save();
+            }elseif(($id <= 3 || ($id == 4 && $request->input("loan") == 1)) && $request->input("relation") <= 3){
+                # 家族来店時のみ通常の代理人受付が可能な場合
+                if($id <= 3 && $request->input("relation") == 1){
+                    $memo->notice .= PHP_EOL."契約者以外の方がご来店の上で上記のお手続きをいただくにあたり、追加で以下の書類が全て必要になります。".PHP_EOL."・ご来店者様の本人確認書類（運転免許証または個人番号カードまたは健康保険証など。ご契約者様とご来店者様のご住所が同一であることを確認させていただきます）".PHP_EOL."・ご契約様にご記入いただいた委任状（ご記入から3ヶ月後の月末まで有効です）".PHP_EOL."・ご来店者様の住民票・公共料金領収書など（ご来店者様の運転免許証か個人番号カードをお持ちいただいている場合には不要です。詳しくはショップもしくはインフォメーションセンターにお問い合わせください）".PHP_EOL."上記いずれかをご準備いただくようにお願いいたします。";
+                }elseif($id <= 3 && ($request->input("relation") == 2 || $request->input("relation") == 3)){
+                    $memo->notice .= PHP_EOL."契約者以外の方がご来店の上で上記のお手続きをいただくにあたり、追加で以下の書類が全て必要になります。".PHP_EOL."・ご来店者様の本人確認書類（運転免許証または個人番号カードまたは健康保険証など。）".PHP_EOL."・ご契約様にご記入いただいた委任状（ご記入から3ヶ月後の月末まで有効です）".PHP_EOL."・ご来店者様の住民票・公共料金領収書など（ご来店者様の運転免許証か個人番号カードをお持ちいただいている場合には不要です。詳しくはショップもしくはインフォメーションセンターにお問い合わせください）".PHP_EOL."・住民票・戸籍謄本など、ご契約者様とご来店者様の続柄確認が可能なもの".PHP_EOL."上記いずれかをご準備いただくようにお願いいたします。";
+                }
+                $memo->save();
+            }elseif($id <= 3){
+                # 新規系統は家族でないと代理人受付不可なので、既存のレコードを受付不可用のものに切り替える
+                if($memo->memo_licenses->first != null){
+                    foreach($memo->memo_licenses as $memo_license){
+                        $memo_license->delete();
+                    }
+                }
+                if($memo->memo_pays->first != null){
+                    foreach($memo->memo_pays as $memo_pay){
+                        $memo_pay->delete();
+                    }
+                }
+                if($memo->memo_papers->first != null){
+                    foreach($memo->memo_papers as $memo_paper){
+                        $memo_paper->delete();
+                    }
+                }
+                $memo_license = new MemoLicense();
+                $memo_license->memo_id = $memo->id;
+                $memo_license->license_id = 99;
+                $memo_license->save();
+                # メモの中身を上書き
+                $memo->notice = "申し訳ございませんが、上記のお手続きが可能なのは以下の場合に限られます。".PHP_EOL."・契約者ご本人様にご来店いただいた場合".PHP_EOL."・契約者ご本人様とご家族の方にご来店いただいた場合".PHP_EOL."詳しくはショップもしくはインフォメーションセンターにお問い合わせください。";
+            }
+            # 家族受付可能な状況で、選択した手続きが故障の場合の注意事項
+            if($id == 5 && $request->input("relation") <= 3){
+                $memo->notice .= PHP_EOL."ーーご注意！！ーー".PHP_EOL."上記の書類でお受付可能なのは、あくまでも故障（の可能性のある）端末の状態を見させていただくという部分になります。".PHP_EOL."お預かり修理などのお手続きになる場合には委任状などが追加で必要となります。".PHP_EOL."ご不安であればショップまたはインフォメーションセンターにお問い合わせください。";
+            }
+        }
+
         $memo->save();
         $user = Auth::user();
         return view("memos.store", compact("memo", "user"));
