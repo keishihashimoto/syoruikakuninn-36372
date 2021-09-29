@@ -39,7 +39,7 @@ class Memo extends Model
         ["id" => 14, "name" => "付属品のご購入", "main_pattern" => 6, "notice" => "契約者ご本人様以外の方がご来店された場合、ポイントカードのご提示がなければポイントの付与ができかねる場合がございます。"],
         ["id" => 15, "name" => "操作のご案内", "main_pattern" => 6],
         ["id" => 16, "name" => "修理品のお受け取り", "main_pattern" => 2, "sub_pattern" => "1"],
-        ["id" => 17, "name" => "ケータイ補償サービスのお受け取り", "main_pattern" => 2, "sub_pattern" => "1"],
+        ["id" => 17, "name" => "ケータイ補償サービスのお申し込み・お受け取り", "main_pattern" => 2, "sub_pattern" => "1"],
         ["id" => 18, "name" => "インターネットのお申し込み", "main_pattern" => 2, "sub_pattern" => "1"],
         ["id" => 19, "name" => "インターネットのご解約", "main_pattern" => 2, "sub_pattern" => "1"],
         ["id" => 20, "name" => "インターネットのご契約内容の変更", "main_pattern" => 2, "sub_pattern" => "1"],

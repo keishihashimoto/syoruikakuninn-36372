@@ -5,8 +5,10 @@ $(document).on("change", '#procedure-select', function(){
   if(id == 8){
     $('#nwpw').css("display", "block");
     $("#nwpw-ng").prop("checked", true)
+    $("#nwpw").find("input").prop("disabled", false)
   } else {
     $('#nwpw').css("display", "none");
+    $("#nwpw").find("input").prop("disabled", false)
     $("#nwpw").find("input[type='input']:checked").prop("checked", false)
   }
 });
@@ -52,7 +54,7 @@ jQuery(function($){
       $("#comer").css("display", "block");
       $("#comer-self").prop("checked", true)
     }else{
-      $("#comer").css("display", "none");
+      $("#comer").css("display", "none")
       $('#comer').find("input[type='radio']:checked").prop("checked", false)
       $('#relation').css("display", "none")
       $('#relation').find("input[type='radio']:checked").prop("checked", false)
@@ -61,17 +63,37 @@ jQuery(function($){
     }
   })
   $(".comer").on("change", function(){
-    var comer = $(".comer:checked").val()
+    var id = $('#procedure-select').val();
+    var comer = $(".comer:checked").val();
+    var sim = $("#sim").find("input:checked").val();
     if(comer == 1){
       $('#relation').css("display", "none")
       $('#relation').find("input[type='radio']:checked").prop("checked", false)
       $('#agent').css("display", "none")
       $('#agent').find("input[type='radio']:checked").prop("checked", false)
+      $('#nwpw').find("input").prop("disabled", false)
+      if(id == 8){
+        $('#nwpw').css("display", "block")
+        $("#nwpw-ng").prop("checked", true)
+      }else{
+        $('#nwpw').css("display", "none")
+        $("#nwpw").find("input").prop("disabled", false)
+        $('#nwpw').find("input[type='radio']:checked").prop("checked", false)
+      }
     }else{
       $('#relation').css("display", "block")
       $("#sameAddress").prop("checked", true)
       $('#agent').css("display", "block")
       $('#agentNot').prop("checked", true)
+      if(id == 8 || ((id == 10 || id == 11) && sim == 2)){
+        $('#nwpw').css("display", "block")
+        $("#nwpw-ng").prop("checked", true)
+        $('#nwpw').find("input").prop("disabled", true);
+      }else{
+        $('#nwpw').find("input").prop("disabled", false);
+        $('#nwpw').css("display", "none")
+        $('#nwpw').find("input[type='radio']:checked").prop("checked", false)
+      }
     }
   })
   $('#procedure-select').on("change", function(){
@@ -84,14 +106,34 @@ jQuery(function($){
       $('#sim').find("input[type='radio']:checked").prop("checked", false)
     }
   })
-  $('#sim').find("input[type='radio']").on("change", function(){
+  $('#sim').on("change", function(){
     var sim = $("#sim").find("input:checked").val();
+    var comer = $(".comer:checked").val();
     if(sim == 2){
       $('#nwpw').css("display", "block");
+      $("#nwpw").find("input").prop("disabled", false)
       $("#nwpw-ng").prop("checked", true)
+      if(comer == 1){
+        $("#nwpw").find("input").prop("disabled", false)
+      }else if(comer == 2 ){
+        $("#nwpw").find("input").prop("disabled", true)
+      }
     }else{
+      $('#nwpw').find("input").prop("disabled", false);
       $('#nwpw').css("display", "none");
       $("#nwpw").find("input[type='input']:checked").prop("checked", false)
     }
   })
+  $('#procedure-select').on("change", function(){
+    var id = $("#procedure-select").val()
+    if(id == 17){
+      $("#compensation").css("display", "block")
+      $('#go').prop("checked", true)
+    }else{
+      $('#nwpw').find("input").prop("disabled", false);
+      $("#compensation").css("display", "none")
+      $("#compensation").find("input[type='radio']:checked").prop("checked", false)
+    }
+  })
+  
 });

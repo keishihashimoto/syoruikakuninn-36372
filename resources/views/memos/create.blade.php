@@ -114,8 +114,25 @@
       </div>
     </div>
 
+    <div id="compensation" style="display: none;">
+      <div class="fs-2 alert alert-danger">
+        <strong>ご注意！！</strong><br>
+        紛失に伴いケータイ補償サービスをご利用されるお客様は、「ケータイ補償サービスのお申し込み・お受け取り」ではなく「紛失」をお選びください。<br>
+        今回のお手続きは補償サービスのお申し込みとお受け取りのどちらですか？
+        <br class="d-inline d-sm-none">以下からお選びください
+      </div>
+      <div class="form-check form-group px-5">
+        <input type="radio" class="form-check-input" id="go" name="compensation" value="1" checked>
+        <label for="go" class="form-check-label">補償サービスのお申し込み</label>
+      </div>
+      <div class="form-check form-group px-5">
+        <input type="radio" class="form-check-input" id="back" name="compensation" value="2">
+        <label for="back" class="form-check-label">補償サービスの受け取り</label>
+      </div>
+    </div>
+
     <div id="nwpw" style="display: none;">
-      <div class="fs-6 mt-2 alert alert-danger">ネットワーク暗証番号がお分かりかどうかを以下からお選びください<br class="d-inline d-sm-none">（未選択の場合は番号がお分かりでないとして扱われます）</div>
+      <div class="fs-6 mt-2 alert alert-danger">ネットワーク暗証番号がお分かりかどうかを以下からお選びください<br class="d-inline d-sm-none">（ご契約者様以外の方がご来店される場合には、選択は不要です）</div>
       <div>
         <div class="form-check form-group px-5">
           <input type="radio" class="form-check-input" name="nwpw" value="1" id="nwpw-ok">
