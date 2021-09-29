@@ -53,34 +53,34 @@ class MemoController extends Controller
         # 法人名義の場合は、法人名義である旨を明記
         $memo = new Memo();
         if(Auth::user()->is_corporation == 1){
-            $memo->notice = "お客様の属性：法人";
+            $memo->condition = "お客様の属性：法人";
         }elseif($age >= 20){
-            $memo->notice = "お客様の属性：個人名義(成人）";
+            $memo->condition = "お客様の属性：個人名義(成人）";
         }else{
-            $memo->notice = "お客様の属性：個人名義(未成年）";
+            $memo->condition = "お客様の属性：個人名義(未成年）";
         }
         if($request->input("student") == 1){
-            $memo->notice .= PHP_EOL."学生のお客様です";
+            $memo->condition .= PHP_EOL."学生のお客様です";
         }elseif(Auth::user()->is_corporation !== 1){
-            $memo->notice .= PHP_EOL."学生のお客様ではありません";
+            $memo->condition .= PHP_EOL."学生のお客様ではありません";
         }
         $id = $request->input("procedure-select");
         # 来店者の情報をメモの追加
         if($id < 13 || $id > 15){
             if($request->input("comer") == 1){
-                $memo->notice .= PHP_EOL."来店者：契約者ご本人様";
+                $memo->condition .= PHP_EOL."来店者：契約者ご本人様";
             }elseif($request->input("relation") == 1 && ($request->input("agent") == 1 || $request->input("agent") == 2)){
-                $memo->notice .= PHP_EOL."来店者：契約者以外の方（同一住所・ドコモ回線あり）";
+                $memo->condition .= PHP_EOL."来店者：契約者以外の方（同一住所・ドコモ回線あり）";
             }elseif($request->input("relation") == 1){
-                $memo->notice .= PHP_EOL."来店者：契約者以外の方（同一住所・ドコモ回線なし）";
+                $memo->condition .= PHP_EOL."来店者：契約者以外の方（同一住所・ドコモ回線なし）";
             }elseif(($request->input("relation") == 2 || $request->input("relation") == 3) && ($request->input("agent") == 1 || $request->input("agent") == 2)){
-                $memo->notice .= PHP_EOL."来店者：契約者以外の方（同一住所ではないご家族の方・ドコモ回線あり）";
+                $memo->condition .= PHP_EOL."来店者：契約者以外の方（同一住所ではないご家族の方・ドコモ回線あり）";
             }elseif($request->input("relation") == 2 || $request->input("relation") == 3){
-                $memo->notice .= PHP_EOL."来店者：契約者以外の方（同一住所ではないご家族の方・ドコモ回線なし）";
+                $memo->condition .= PHP_EOL."来店者：契約者以外の方（同一住所ではないご家族の方・ドコモ回線なし）";
             }elseif($request->input("relation") == 4 && ($request->input("agent") == 1 || $request->input("agent") == 2)){
-                $memo->notice .= PHP_EOL."来店者：契約者以外の方（ご家族の方以外・ドコモ回線あり）";
+                $memo->condition .= PHP_EOL."来店者：契約者以外の方（ご家族の方以外・ドコモ回線あり）";
             }elseif($request->input("relation") == 4){
-                $memo->notice .= PHP_EOL."来店者：契約者以外の方（ご家族の方以外・ドコモ回線なし）";
+                $memo->condition .= PHP_EOL."来店者：契約者以外の方（ご家族の方以外・ドコモ回線なし）";
             }
         }
         # 一部の手続きに関しては、未成年限定で注意事項を追加
@@ -89,24 +89,24 @@ class MemoController extends Controller
         # 都度同意の場合だと同意書などが必要になるのが5 ~ 11, 16, 17, 19, 20
         # 最初に、保護者の同時来店の有無をメモに追加
         if(Auth::user()->is_corporation != true && $age < 20 && $request->input("parent") == 1 && ($id <= 11 || ($id >= 16 && $id <= 21))){
-            $memo->notice .= PHP_EOL."保護者の方の来店：あり。";
+            $memo->condition .= PHP_EOL."保護者の方の来店：あり。";
         }elseif(Auth::user()->is_corporation != true && $age < 20 && $request->input("parent") == 2 && ($id <= 11 || ($id >= 16 && $id <= 21))){
-            $memo->notice .= PHP_EOL."保護者の方の来店：なし。";
+            $memo->condition .= PHP_EOL."保護者の方の来店：なし。";
         }
         # 同意書などについての諸注意は、memoの最後に追加
 
         # 紛失・解約の場合はSIMカードの持参可否をメモの最初に追加
         if(($id == 10 || $id == 11) && $request->input("sim") == 1){
-            $memo->notice .= PHP_EOL."SIMカードのご持参：可能";
+            $memo->condition .= PHP_EOL."SIMカードのご持参：可能";
         }elseif($id == 10 || $id == 11){
-            $memo->notice .= PHP_EOL."SIMカードのご持参：不可能";
+            $memo->condition .= PHP_EOL."SIMカードのご持参：不可能";
         }
 
         # nwpwがわかるかどうかもメモに追加
         if($request->input("nwpw") != null && $request->input("nwpw") == 1){
-            $memo->notice .= PHP_EOL."ネットワーク暗証番号：分かる";
+            $memo->condition .= PHP_EOL."ネットワーク暗証番号：分かる";
         }elseif($request->input("nwpw") != null){
-            $memo->notice .= PHP_EOL."ネットワーク暗証番号：分からない・不安である";
+            $memo->condition .= PHP_EOL."ネットワーク暗証番号：分からない・不安である";
         }
 
         # 手続きのパターンによって処理を分岐
@@ -608,7 +608,7 @@ class MemoController extends Controller
                 $memo_license->license_id = 99;
                 $memo_license->save();
                 # メモの中身を上書き
-                $memo->notice = "申し訳ございませんが、上記のお手続きが可能なのは以下の場合に限られます。".PHP_EOL."・契約者ご本人様にご来店いただいた場合".PHP_EOL."・契約者ご本人様とご家族の方にご来店いただいた場合".PHP_EOL."詳しくはショップもしくはインフォメーションセンターにお問い合わせください。";
+                $memo->notice = PHP_EOL."申し訳ございませんが、上記のお手続きが可能なのは以下の場合に限られます。".PHP_EOL."・契約者ご本人様にご来店いただいた場合".PHP_EOL."・契約者ご本人様とご家族の方にご来店いただいた場合".PHP_EOL."詳しくはショップもしくはインフォメーションセンターにお問い合わせください。";
             }
             # 家族受付可能な状況で、選択した手続きが故障の場合の注意事項
             if($id == 5 && $request->input("relation") <= 3){

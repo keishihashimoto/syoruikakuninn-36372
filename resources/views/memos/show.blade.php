@@ -65,9 +65,16 @@
             </li>
           @endif
 
+          @if($memo->condition !== null)
+            <li class="list-group-item">
+              <div><strong>備考</strong></div>
+              <div class="pl-2">{!! nl2br(e($memo->condition)) !!}</div>
+            </li>
+          @endif
+
           @if($memo->notice !== null)
             <li class="list-group-item">
-              <div><strong>ご注意事項</strong></div>
+              <div style="margin-bottom: -18px;"><strong>ご注意事項</strong></div>
               <div class="pl-2">{!! nl2br(e($memo->notice)) !!}</div>
             </li>    
           @endif
