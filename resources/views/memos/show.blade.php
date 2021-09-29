@@ -26,6 +26,7 @@
                   <div>特にお持ちいただく書類はありません</div>
                 @else
                   <div class="text-right" style="font-size: 10px;">以下の中からいずれか一つをお持ちください</div>
+                  <div class="text-right" style="font-size: 10px;">契約者ご本人様のものをお持ちください</div>
                   <div class="d-flex flex-wrap pt-2">
                     @foreach($memo->memo_licenses as $memo_license)
                       <div class="mr-3 my-1 badge badge-gray" style="font-size: 14px;">{{ App\Models\User::$licenses[($memo_license->license_id - 1)]['name'] }}</div>
@@ -45,6 +46,7 @@
             <li class="list-group-item">
               <div>お支払い設定に必要なもの</div>
               <div class="text-right" style="font-size: 10px;">以下の中からいずれか一つをお持ちください</div>
+              <div class="text-right" style="font-size: 10px;">契約者ご本人様のものをお持ちください</div>
               <div class="d-flex flex-wrap pt-2">
                 @foreach($memo->memo_pays as $memo_pay)
                   <div class="mr-3 my-1 badge badge-gray" style="font-size: 14px;">{{ App\Models\UserPay::$pays[($memo_pay->pay_id - 1)]['name'] }}</div>
@@ -57,6 +59,7 @@
             <li class="list-group-item">
               <div>お手続きに必要な補助書類</div>
               <div class="text-right" style="font-size: 10px;">以下の中からいずれか一つをお持ちください</div>
+              <div class="text-right" style="font-size: 10px;">契約者ご本人様のものをお持ちください</div>
               <div class="d-flex flex-wrap pt-2">
                 @foreach($memo->memo_papers as $memo_paper)
                   <div class="mr-3 my-1 badge badge-gray" style="font-size: 14px;">{{ App\Models\UserPaper::$papers[($memo_paper->paper_id - 1)]["name"] }}</div>
