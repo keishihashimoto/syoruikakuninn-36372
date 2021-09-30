@@ -36,9 +36,11 @@
               </div>
             </li>
           @else
-            <li class="list-group-item d-sm-flex justify-content-sm-between">
-              <div>お手続きの可否</div>
-              <div>申し訳ございませんが現在ご登録いただいている書類ではこのお手続きを承ることは致しかねます。</div>
+            <li class="list-group-item p-0">
+              <div class="alert alert-danger mb-0 rounded-0">
+                <div><strong>お手続きの不可</strong></div>
+                <div>申し訳ございませんが現在ご登録いただいている書類ではこのお手続きを承ることは致しかねます。</div>
+              </div>
             </li>
           @endif
           
