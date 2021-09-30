@@ -40,6 +40,38 @@
       </div>
     </div>
 
+    <div id="ownDocomo" style="display: none;">
+      <div class="fs-2 alert alert-danger">契約者ご本人様はご自身名義の回線・dクレジットカード・インターネットのご契約をお持ちですか？</div>
+      <div class="form-check form-group px-5">
+        <input type="radio" class="form-check-input" id="ownDocomoYes" name="ownDocomo" value="1">
+        <label for="ownDocomoYes" class="form-check-label">ご自身名義の回線・dクレジットカード・インターネットを持っている</label>
+      </div>
+      <div class="form-check form-group px-5">
+        <input type="radio" class="form-check-input" id="ownDocomoNo" name="ownDocomo" value="2">
+        <label for="ownDocomoNo" class="form-check-label">ご自身名義の回線・dクレジットカード・インターネットを持っていない</label>
+      </div>
+    </div>
+    
+    <div id="pointCardUser" style="display: none;">
+      <div class="fs-2 alert alert-danger">ポイントカードのご利用者様について該当するものを以下から一つお選びください<br>（上記にて「回線・クレジットカード・インターネットの契約を持っていない」を選択した場合には、この項目の選択は不要です）。</div>
+      <div class="form-check form-group px-5">
+        <input type="radio" class="form-check-input" id="yesAndCome" name="pointCardUser" value="1">
+        <label for="yesAndCome" class="form-check-label">ご自身名義の回線・dクレジットカード・インターネットを持っており、手続き時に来店する</label>
+      </div>
+      <div class="form-check form-group px-5">
+        <input type="radio" class="form-check-input" id="yesAndStay" name="pointCardUser" value="2">
+        <label for="yesAndStay" class="form-check-label">ご自身名義の回線・dクレジットカード・インターネットを持っているが、手続き時に来店しない</label>
+      </div>
+      <div class="form-check form-group px-5">
+        <input type="radio" class="form-check-input" id="noAndCome" name="pointCardUser" value="3">
+        <label for="noAndCome" class="form-check-label">ご自身名義の回線・dクレジットカード・インターネットを持っていないが、手続き時に来店する</label>
+      </div>
+      <div class="form-check form-group px-5">
+        <input type="radio" class="form-check-input" id="noAndStay" name="pointCardUser" value="4">
+        <label for="noAndStay" class="form-check-label">ご自身名義の回線・dクレジットカード・インターネットを持っておらず、手続き時に来店しない</label>
+      </div>
+    </div>
+
     <div id="relation" style="display: none;">
       <div class="fs-2 alert alert-danger">今回ご来店される方と契約者の方のご関係をお選びください<br class="d-inline d-sm-none">（未選択の場合は「同一住所の方」として扱われます）</div>
       <div class="form-check form-group px-5">
@@ -61,18 +93,18 @@
     </div>
 
     <div id="agent" style="display: none;">
-      <div class="fs-2 alert alert-danger">今回のお手続きでご来店される方は、ご自身名義のドコモ回線のご契約をお持ちですか？<br class="d-inline d-sm-none">（未選択の場合はお持ちでないとして扱われます）</div>
+      <div class="fs-2 alert alert-danger">今回のお手続きでご来店される方は、ご自身名義の回線のご契約をお持ちですか？<br class="d-inline d-sm-none">（未選択の場合はお持ちでないとして扱われます）</div>
       <div class="form-check form-group px-5">
         <input type="radio" class="form-check-input" id="agentFamily" name="agent" value="1">
-        <label for="agentFamily" class="form-check-label">ドコモの契約があり、今回手続きをする回線とファミリー割引グループ・一括請求グループを両方とも組んでいる。</label>
+        <label for="agentFamily" class="form-check-label">回線契約があり、今回手続きをする回線とファミリー割引グループ・一括請求グループを両方とも組んでいる。</label>
       </div>
       <div class="form-check form-group px-5">
         <input type="radio" class="form-check-input" id="agentDocomo" name="agent" value="2">
-        <label for="agentDocomo" class="form-check-label">ドコモの契約があるものの、今回手続きをする回線とはファミリー割引グループ・一括請求グループのどちらかもしくは両方を組んでいない。</label>
+        <label for="agentDocomo" class="form-check-label">回線契約があるものの、今回手続きをする回線とはファミリー割引グループ・一括請求グループのどちらかもしくは両方を組んでいない。</label>
       </div>
       <div class="form-check form-group px-5">
         <input type="radio" class="form-check-input" id="agentNot" name="agent" value="3">
-        <label for="agentNot" class="form-check-label">ドコモの契約を持っていない。</label>
+        <label for="agentNot" class="form-check-label">回線契約を持っていない。</label>
       </div>
     </div>
 
@@ -127,7 +159,7 @@
       </div>
       <div class="form-check form-group px-5">
         <input type="radio" class="form-check-input" id="back" name="compensation" value="2">
-        <label for="back" class="form-check-label">補償サービスの受け取り</label>
+        <label for="back" class="form-check-label">補償サービスのお受け取り</label>
       </div>
     </div>
 
@@ -146,7 +178,7 @@
     </div>
 
     <div id="payment-form" style="display: none;">
-      <div class="fs-6 mt-2 alert alert-danger">お支払い用紙をお持ちかどうかを以下からお選びください<br class="d-inline d-sm-none">（未選択の場合は用紙をお持ちではないとして扱われます）</div>
+      <div class="fs-6 mt-2 alert alert-danger">お支払い用紙をお持ちかどうかを以下からお選びください</div>
       <div>
         <div class="form-check form-group px-5">
           <input type="radio" id="payment-form-ok" name="payment-form" value="1" class="form-check-input">

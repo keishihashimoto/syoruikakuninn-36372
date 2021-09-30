@@ -84,6 +84,23 @@ class MemoController extends Controller
                 $memo->condition .= PHP_EOL."来店者：契約者以外の方（ご家族の方以外・ドコモ回線なし）";
             }
         }
+        # ポイントカード発行の場合は、契約者のドコモ契約の有無と利用者の情報を追加
+        if($id == 12){
+            if($request->input("ownDocomo") == 1){
+                $memo->condition .= PHP_EOL."ご契約者様の回線・クレジットカード・インターネットのご契約の有無：いずれかのご契約あり";
+            }elseif($request->input("ownDocomo") == 2){
+                $memo->condition .= PHP_EOL."ご契約者様の回線・クレジットカード・インターネットのご契約の有無：いずれのご契約もなし";
+            }
+            if($request->input("pointCardUser") == 1){
+                $memo->condition .= PHP_EOL."ポイントカードご利用者様の回線・クレジットカード・インターネットのご契約の有無：いずれかのご契約あり".PHP_EOL."ポイントカードご利用者様のご来店：あり";
+            }elseif($request->input("pointCardUser") == 2){
+                $memo->condition .= PHP_EOL."ポイントカードご利用者様の回線・クレジットカード・インターネットのご契約の有無：いずれかのご契約あり".PHP_EOL."ポイントカードご利用者様のご来店：なし";
+            }elseif($request->input("pointCardUser") == 3){
+                $memo->condition .= PHP_EOL."ポイントカードご利用者様の回線・クレジットカード・インターネットのご契約の有無：いずれのご契約もなし".PHP_EOL."ポイントカードご利用者様のご来店：あり";
+            }elseif($request->input("pointCardUser") == 3){
+                $memo->condition .= PHP_EOL."ポイントカードご利用者様の回線・クレジットカード・インターネットのご契約の有無：いずれかのご契約もなし".PHP_EOL."ポイントカードご利用者様のご来店：なし";
+            }
+        }
         # 一部の手続きに関しては、未成年限定で注意事項を追加
         # 最初に、保護者の同時来店の有無を記載
         # 対象の手続きは、都度同意かどうかによらないものが1 ~ 4, 18, 21
@@ -327,9 +344,31 @@ class MemoController extends Controller
                     $memo_license->license_id = 99;
                     $memo_license->save();
                 }
+            }elseif($id == 12){
+                # dポイントカード発行は処理を分岐
+                if($request->input("ownDocomo") == 1){
+                    $memo->notice .= PHP_EOL."お手続きの際に、ご契約者様のネットワーク暗証番号・ご住所・ご連絡先番号・ご生年月日のいずれかをお伺いします（契約者ご本人様以外がご来店されている場合には、ネットワーク暗証番号はお伺いしません）。".PHP_EOL."あらかじめご了承ください。";
+                    $memo->save();
+                }elseif($request->input("ownDocomo") == 2){
+                    if(Auth::user()->user_licenses->first() != null){
+                        $memo->save();
+                        foreach(Auth::user()->user_licenses as $user_license){
+                            $memo_license = new MemoLicense();
+                            $memo_license->memo_id = $memo->id;
+                            $memo_license->license_id = $user_license->license_id;
+                            $memo_license->save();
+                        }
+                    }else{
+                        $memo->notice .=PHP_EOL."回線・クレジットカード・インターネットいずれのご契約もお持ちでないお客様は上記のお手続きにあたり以下の書類が必ず必要になります。".PHP_EOL."・運転免許証、健康保険証、個人番号カードなどのご本人様確認書類".PHP_EOL."あらかじめご了承ください。";
+                        $memo_license = new MemoLicense();
+                            $memo_license->memo_id = $memo->id;
+                            $memo_license->license_id = 99;
+                            $memo_license->save();
+                    }
+                }
             } else {
                 if($id == 4){
-                    $memo->notice .= PHP_EOL."分割のご希望：なし。";
+                    $memo->condition .= PHP_EOL."分割のご希望：なし。";
                 }
                 if(isset(Memo::$procedures[($id - 1)]['notice'])){
                     if($memo->notice == null){
@@ -732,6 +771,28 @@ class MemoController extends Controller
             if($id == 5 && $request->input("relation") <= 3){
                 $memo->notice .= PHP_EOL."ーーご注意！！ーー".PHP_EOL."上記の書類でお受付可能なのは、あくまでも故障（の可能性のある）端末の状態を見させていただくという部分になります。".PHP_EOL."お預かり修理などのお手続きになる場合には委任状などが追加で必要となります。".PHP_EOL."ご不安であればショップまたはインフォメーションセンターにお問い合わせください。";
             }
+        }
+        # ポイントカード発行で契約者もしくは利用者が来店できない場合には、注意事項を追加
+        if($id == 12){
+            if($request->input("comer") == 2 || $request->input("agent") == 3 || $request->input("pointCardUser") >= 2 ){
+                $memo->notice .= PHP_EOL."今回のお手続きでは、追加で以下のものが必要になります";
+                if($request->input("comer") == 2 || $request->input("pointCardUser") == 2 || $request->input("pointCardUser") == 4){
+                    $memo->notice .= PHP_EOL."・dポイントクラブ入会／dポイント利用者情報登録に関する同意書（ご記入から3ヶ月後の月末まで有効。ご契約者様・ご利用者様双方のご記入蘭がございます。）";
+                }
+                if($request->input("comer") == 2){
+                    $memo->notice .= PHP_EOL."・ご契約様にご記入いただいた委任状（ご記入から3ヶ月後の月末まで有効。）";
+                }
+                if($request->input("agent") == 3){
+                    $memo->notice .= PHP_EOL."・ご来店者様のご本人様確認書類（運転免許証・健康保険証・個人番号カードなど）";
+                }
+                if($request->input("pointCardUser") >= 3){
+                    $memo->notice .= PHP_EOL."・ポイントカードご利用様のご本人様確認書類（運転免許証・健康保険証・個人番号カードなど）";
+                }
+            }
+            if($request->input("ownDocomo") == 1 || $request->input("agent") <= 2 || $request->input("pointCardUser") <= 2){
+                $memo->notice .= PHP_EOL."また、ご契約者様・ご来店者様・ご利用者様の中で携帯電話・クレジットカード・インターネットのいずれかのご契約をお持ちの方について、ご生年月日・ご住所・ご連絡先お電話番号などをお伺いする場合がございます。";
+            }
+            $memo->notice .= PHP_EOL."あらかじめご了承ください。";
         }
 
         $memo->save();

@@ -28,7 +28,7 @@ $(document).on("change", "#procedure-select", function(){
   var id = $('#procedure-select').val();
   if(id == 13){
     $('#payment-form').css("display", "block");
-    $("#payment-form-ok").prop("checked", true)
+    $("#payment-form-ng").prop("checked", true)
   } else {
     $("#payment-form").css("display", "none");
     $('#payment-form').find('#input[type="radio"]:checked').prop("checked", false)
@@ -121,7 +121,7 @@ jQuery(function($){
     }else{
       $('#nwpw').find("input").prop("disabled", false);
       $('#nwpw').css("display", "none");
-      $("#nwpw").find("input[type='input']:checked").prop("checked", false)
+      $("#nwpw").find("input[type='radio']:checked").prop("checked", false)
     }
   })
   $('#procedure-select').on("change", function(){
@@ -135,5 +135,52 @@ jQuery(function($){
       $("#compensation").find("input[type='radio']:checked").prop("checked", false)
     }
   })
-  
+  $('#procedure-select').on("change", function(){
+    var id = $('#procedure-select').val();
+    if(id == 12){
+      $("#ownDocomo").css("display", "block")
+      $("#ownDocomoYes").prop("checked", true)
+      $("#pointCardUser").css("display", "block")
+      $("#noAndStay").prop("checked", true)
+    }else{
+      $("#ownDocomo").css("display", "none")
+      $("#ownDocomo").find("input[type='radio']:checked").prop("checked", false)
+      $("#pointCardUser").find("input[type='radio']").prop("disabled", false)
+      $("#pointCardUser").css("display", "none")
+      $("#pointCardUser").find("input[type='radio']:checked").prop("checked", false)
+    }
+  })  
+  $('#ownDocomo').on("change", function(){
+    var ownDocomo = $('#ownDocomo').find("input[type='radio']:checked").val()
+    var comer = $("#comer").find("input[type='radio']:checked").val()
+    console.log(ownDocomo)
+    if(ownDocomo == 2 && comer == 2){
+      $("#pointCardUser").find("input[type='radio']").prop("disabled", false)
+      $('#noAndStay').prop("checked", true)
+      $("#pointCardUser").find("input[type='radio']").prop("disabled", true)
+    }else if(ownDocomo == 2 && comer == 1){
+      $("#pointCardUser").find("input[type='radio']").prop("disabled", false)
+      $('#noAndCome').prop("checked", true)
+      $("#pointCardUser").find("input[type='radio']").prop("disabled", true)
+    }else if(comer == 2 || ownDocomo == 1){
+      $("#pointCardUser").find("input[type='radio']").prop("disabled", false)
+      $('#noAndStay').prop("checked", true)
+    }
+  })
+  $('#comer').on("change", function(){
+    var ownDocomo = $('#ownDocomo').find("input[type='radio']:checked").val()
+    var comer = $("#comer").find("input[type='radio']:checked").val()
+    if(ownDocomo == 2 && comer == 2){
+      $("#pointCardUser").find("input[type='radio']").prop("disabled", false)
+      $('#noAndStay').prop("checked", true)
+      $("#pointCardUser").find("input[type='radio']").prop("disabled", true)
+    }else if(ownDocomo == 2 && comer == 1){
+      $("#pointCardUser").find("input[type='radio']").prop("disabled", false)
+      $('#noAndCome').prop("checked", true)
+      $("#pointCardUser").find("input[type='radio']").prop("disabled", true)
+    }else if(comer == 2 || ownDocomo == 1){
+      $("#pointCardUser").find("input[type='radio']").prop("disabled", false)
+      $('#noAndStay').prop("checked", true)
+    }
+  })
 });
