@@ -41,34 +41,34 @@
     </div>
 
     <div id="ownDocomo" style="display: none;">
-      <div class="fs-2 alert alert-danger">契約者ご本人様はご自身名義の回線・dクレジットカード・インターネットのご契約をお持ちですか？</div>
+      <div class="fs-2 alert alert-danger">契約者ご本人様はご自身名義の携帯回線・dクレジットカード・インターネットのご契約をお持ちですか？</div>
       <div class="form-check form-group px-5">
         <input type="radio" class="form-check-input" id="ownDocomoYes" name="ownDocomo" value="1">
-        <label for="ownDocomoYes" class="form-check-label">ご自身名義の回線・dクレジットカード・インターネットを持っている</label>
+        <label for="ownDocomoYes" class="form-check-label">ご自身名義の携帯回線・dクレジットカード・インターネットを持っている</label>
       </div>
       <div class="form-check form-group px-5">
         <input type="radio" class="form-check-input" id="ownDocomoNo" name="ownDocomo" value="2">
-        <label for="ownDocomoNo" class="form-check-label">ご自身名義の回線・dクレジットカード・インターネットを持っていない</label>
+        <label for="ownDocomoNo" class="form-check-label">ご自身名義の携帯回線・dクレジットカード・インターネットを持っていない</label>
       </div>
     </div>
     
     <div id="pointCardUser" style="display: none;">
-      <div class="fs-2 alert alert-danger">ポイントカードのご利用者様について該当するものを以下から一つお選びください<br>（上記にて「回線・クレジットカード・インターネットの契約を持っていない」を選択した場合には、この項目の選択は不要です）。</div>
+      <div class="fs-2 alert alert-danger">ポイントカードのご利用者様について該当するものを以下から一つお選びください</div>
       <div class="form-check form-group px-5">
-        <input type="radio" class="form-check-input" id="yesAndCome" name="pointCardUser" value="1">
-        <label for="yesAndCome" class="form-check-label">ご自身名義の回線・dクレジットカード・インターネットを持っており、手続き時に来店する</label>
+        <input type="radio" class="form-check-input" id="identical" name="pointCardUser" value="1">
+        <label for="identical" class="form-check-label">ご契約者様と同一</label>
       </div>
       <div class="form-check form-group px-5">
-        <input type="radio" class="form-check-input" id="yesAndStay" name="pointCardUser" value="2">
-        <label for="yesAndStay" class="form-check-label">ご自身名義の回線・dクレジットカード・インターネットを持っているが、手続き時に来店しない</label>
+        <input type="radio" class="form-check-input" id="comeAndHas" name="pointCardUser" value="2">
+        <label for="comerIdentical" class="form-check-label">ご契約者様とは別だが、ご来店者様とは同一</label>
       </div>
       <div class="form-check form-group px-5">
-        <input type="radio" class="form-check-input" id="noAndCome" name="pointCardUser" value="3">
-        <label for="noAndCome" class="form-check-label">ご自身名義の回線・dクレジットカード・インターネットを持っていないが、手続き時に来店する</label>
+        <input type="radio" class="form-check-input" id="notIdenticalAndCome" name="pointCardUser" value="3">
+        <label for="notIdenticalAndCome" class="form-check-label">ご契約者・ご来店者いずれとも別。携帯回線・クレジットカード・インターネットいずれかをご自身名義でお持ち。</label>
       </div>
       <div class="form-check form-group px-5">
-        <input type="radio" class="form-check-input" id="noAndStay" name="pointCardUser" value="4">
-        <label for="noAndStay" class="form-check-label">ご自身名義の回線・dクレジットカード・インターネットを持っておらず、手続き時に来店しない</label>
+        <input type="radio" class="form-check-input" id="notIdenticalAndStay" name="pointCardUser" value="4">
+        <label for="notIdenticalAndStay" class="form-check-label">ご契約者・ご来店者いずれとも別。携帯回線・クレジットカード・インターネットいずれかをご自身名義でお持ちでない。</label>
       </div>
     </div>
 

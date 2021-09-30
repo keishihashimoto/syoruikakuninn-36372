@@ -92,13 +92,13 @@ class MemoController extends Controller
                 $memo->condition .= PHP_EOL."ご契約者様の回線・クレジットカード・インターネットのご契約の有無：いずれのご契約もなし";
             }
             if($request->input("pointCardUser") == 1){
-                $memo->condition .= PHP_EOL."ポイントカードご利用者様の回線・クレジットカード・インターネットのご契約の有無：いずれかのご契約あり".PHP_EOL."ポイントカードご利用者様のご来店：あり";
+                $memo->condition .= PHP_EOL."ポイントカードご利用者様：契約者様と同一";
             }elseif($request->input("pointCardUser") == 2){
-                $memo->condition .= PHP_EOL."ポイントカードご利用者様の回線・クレジットカード・インターネットのご契約の有無：いずれかのご契約あり".PHP_EOL."ポイントカードご利用者様のご来店：なし";
+                $memo->condition .= PHP_EOL."ポイントカードご利用者様：契約者様と同一ではないが、ご来店者様とは同一";
             }elseif($request->input("pointCardUser") == 3){
-                $memo->condition .= PHP_EOL."ポイントカードご利用者様の回線・クレジットカード・インターネットのご契約の有無：いずれのご契約もなし".PHP_EOL."ポイントカードご利用者様のご来店：あり";
-            }elseif($request->input("pointCardUser") == 3){
-                $memo->condition .= PHP_EOL."ポイントカードご利用者様の回線・クレジットカード・インターネットのご契約の有無：いずれかのご契約もなし".PHP_EOL."ポイントカードご利用者様のご来店：なし";
+                $memo->condition .= PHP_EOL."ポイントカードご利用者様：ご契約者様・ご来店者様のいずれとも同一ではない。携帯回線・クレジットカード・インターネットのいずれかのご契約をお持ち。";
+            }elseif($request->input("pointCardUser") == 4){
+                $memo->condition .= PHP_EOL."ポイントカードご利用者様：ご契約者様・ご来店者様のいずれとも同一ではない。携帯回線・クレジットカード・インターネットのいずれかのご契約をお持ちでない。";
             }
         }
         # 一部の手続きに関しては、未成年限定で注意事項を追加
@@ -776,7 +776,7 @@ class MemoController extends Controller
         if($id == 12){
             if($request->input("comer") == 2 || $request->input("agent") == 3 || $request->input("pointCardUser") >= 2 ){
                 $memo->notice .= PHP_EOL."今回のお手続きでは、追加で以下のものが必要になります";
-                if($request->input("comer") == 2 || $request->input("pointCardUser") == 2 || $request->input("pointCardUser") == 4){
+                if($request->input("comer") == 2 || $request->input("pointCardUser") >= 3){
                     $memo->notice .= PHP_EOL."・dポイントクラブ入会／dポイント利用者情報登録に関する同意書（ご記入から3ヶ月後の月末まで有効。ご契約者様・ご利用者様双方のご記入蘭がございます。）";
                 }
                 if($request->input("comer") == 2){
@@ -785,8 +785,8 @@ class MemoController extends Controller
                 if($request->input("agent") == 3){
                     $memo->notice .= PHP_EOL."・ご来店者様のご本人様確認書類（運転免許証・健康保険証・個人番号カードなど）";
                 }
-                if($request->input("pointCardUser") >= 3){
-                    $memo->notice .= PHP_EOL."・ポイントカードご利用様のご本人様確認書類（運転免許証・健康保険証・個人番号カードなど）";
+                if($request->input("pointCardUser") == 4){
+                    $memo->notice .= PHP_EOL."・ポイントカードご利用者様のご本人様確認書類（運転免許証・健康保険証・個人番号カードなど）";
                 }
             }
             if($request->input("ownDocomo") == 1 || $request->input("agent") <= 2 || $request->input("pointCardUser") <= 2){
