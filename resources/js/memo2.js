@@ -61,6 +61,10 @@ jQuery(function($){
       $('#agent').css("display", "none")
       $('#agent').find("input[type='radio']:checked").prop("checked", false)
     }
+    if(id <= 3){
+      $('#agent').css("display", "none")
+      $('#agent').find("input[type='radio']:checked").prop("checked", false)
+    }
   })
   $(".comer").on("change", function(){
     var id = $('#procedure-select').val();
@@ -83,8 +87,10 @@ jQuery(function($){
     }else{
       $('#relation').css("display", "block")
       $("#sameAddress").prop("checked", true)
-      $('#agent').css("display", "block")
-      $('#agentNot').prop("checked", true)
+      if(id >= 4 && id <= 23){
+        $('#agent').css("display", "block")
+        $('#agentNot').prop("checked", true) 
+      }
       if(id == 8 || ((id == 10 || id == 11) && sim == 2)){
         $('#nwpw').css("display", "block")
         $("#nwpw-ng").prop("checked", true)
