@@ -29,7 +29,7 @@
     </div>
 
     <div id="comer" style="display: none;">
-      <div class="fs-2 alert alert-danger">今回のお手続きで契約者ご本人様はご来店されますか？<br class="d-inline d-sm-none">（未選択の場合はご本人様ご来店として扱われます）</div>
+      <div class="fs-2 alert alert-danger">今回のお手続きで契約者ご本人様はご来店されますか？</div>
       <div class="form-check form-group px-5">
         <input type="radio" class="form-check-input comer" id="comer-self" name="comer" value="1" checked>
         <label for="comer-self" class="form-check-label">契約者本人は来店する</label>
@@ -73,7 +73,7 @@
     </div>
 
     <div id="relation" style="display: none;">
-      <div class="fs-2 alert alert-danger">今回ご来店される方と契約者の方のご関係をお選びください<br class="d-inline d-sm-none">（未選択の場合は「同一住所の方」として扱われます）</div>
+      <div class="fs-2 alert alert-danger">今回ご来店される方と契約者の方のご関係をお選びください</div>
       <div class="form-check form-group px-5">
         <input type="radio" class="form-check-input" id="sameAddress" name="relation" value="1">
         <label for="sameAddress" class="form-check-label">契約者の方と同一住所</label>
@@ -93,7 +93,7 @@
     </div>
 
     <div id="agent" style="display: none;">
-      <div class="fs-2 alert alert-danger">今回のお手続きでご来店される方は、ご自身名義の回線のご契約をお持ちですか？<br class="d-inline d-sm-none">（未選択の場合はお持ちでないとして扱われます）</div>
+      <div class="fs-2 alert alert-danger">今回のお手続きでご来店される方は、ご自身名義の回線のご契約をお持ちですか？</div>
       <div class="form-check form-group px-5">
         <input type="radio" class="form-check-input" id="agentFamily" name="agent" value="1">
         <label for="agentFamily" class="form-check-label">回線契約があり、今回手続きをする回線とファミリー割引グループ・一括請求グループを両方とも組んでいる。</label>
@@ -110,7 +110,7 @@
 
     @if(Auth::user()->is_corporation == false && $age < 20)
       <div id="parent">
-        <div class="fs-2 alert alert-danger">保護者の方が同時にご来店されるかどうかお選びください<br class="d-inline d-md-none">（未選択の場合はご来店なしとして扱われます）</div>
+        <div class="fs-2 alert alert-danger">保護者の方が同時にご来店されるかどうかお選びください<br class="d-inline d-md-none"></div>
         <div class="form-check form-group px-5">
           <input type="radio" class="form-check-input" id="parent-with" name="parent" value="1" checked>
           <label for="parent-with" class="form-check-label">保護者の来店あり</label>
@@ -123,7 +123,7 @@
     @endif
     
     <div id="loan" style="display: none;">
-      <div class="fs-2 alert alert-danger">機種のご購入方法を以下からお選びください<br class="d-inline d-sm-none">（未選択の場合は分割をご希望として扱われます）</div>
+      <div class="fs-2 alert alert-danger">機種のご購入方法を以下からお選びください</div>
       <div class="form-check form-group px-5">
         <input type="radio" class="form-check-input" id="loan-on" name="loan" value="1">
         <label for="loan-on" class="form-check-label">機種の分割購入を希望する</label>
@@ -192,7 +192,7 @@
     </div>
 
     <div id="student"  style="display: none;">
-      <div class="fs-2 alert alert-danger mx-0">学生の方かそうでないかを選択してください<br class="d-inline d-sm-none">（未選択の場合には、学生の方ではないとみなされます）</div>
+      <div class="fs-2 alert alert-danger mx-0">学生の方かそうでないかを選択してください</div>
       <div class="form-check form-group px-5">
         <input type="radio" id="is_student" name="student" value="1" class="form-check-input">
         <label for="is_student" class="form-check-label">学生である</label>
