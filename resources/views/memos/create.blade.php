@@ -108,6 +108,38 @@
       </div>
     </div>
 
+    <div id="previousContractor" style="display: none;">
+      <div class="fs-2 alert alert-danger">お乗り換え元の事業者でのご契約者様について、当てはまるものを一つだけお選びください</div>
+      <div class="form-check form-group px-5">
+        <input type="radio" class="form-check-input" id="self" name="previousContractor" value="1">
+        <label for="self" class="form-check-label">乗り換え後の契約者と同一</label>
+      </div>
+      <div class="form-check form-group px-5">
+        <input type="radio" class="form-check-input" id="sameAddressFamily" name="previousContractor" value="2">
+        <label for="sameAddressFamily" class="form-check-label">乗り換え後の契約者とは別だが、同一住所</label>
+      </div>
+      <div class="form-check form-group px-5">
+        <input type="radio" class="form-check-input" id="anotherAddressFamily" name="previousContractor" value="3">
+        <label for="anotherAddressFamily" class="form-check-label">乗り換え先契約者とは家族だが住所は異なる</label>
+      </div>
+      <div class="form-check form-group px-5">
+        <input type="radio" class="form-check-input" id="anotherFamily" name="previousContractor" value="4">
+        <label for="anotherFamily" class="form-check-label">乗り換え先契約者とは住所が異なり家族ではない</label>
+      </div>
+    </div>
+
+    <div id="previousContractorCome" style="display: none;">
+      <div class="fs-2 alert alert-danger">お乗り換え元のご契約者様のご来店有無について当てはまるものをお選びください</div>
+      <div class="form-check form-group px-5">
+        <input type="radio" class="form-check-input" id="coming" name="previousContractorCome" value="1">
+        <label for="coming" class="form-check-label">来店する</label>
+      </div>
+      <div class="form-check form-group px-5">
+        <input type="radio" class="form-check-input" id="notComing" name="previousContractorCome" value="2">
+        <label for="notComing" class="form-check-label">来店しない</label>
+      </div>
+    </div>
+
     @if(Auth::user()->is_corporation == false && $age < 20)
       <div id="parent">
         <div class="fs-2 alert alert-danger">保護者の方が同時にご来店されるかどうかお選びください<br class="d-inline d-md-none"></div>

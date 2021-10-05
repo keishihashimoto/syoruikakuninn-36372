@@ -65,6 +65,15 @@ jQuery(function($){
       $('#agent').css("display", "none")
       $('#agent').find("input[type='radio']:checked").prop("checked", false)
     }
+    if(id == 1){
+      $('#previousContractor').css("display", "block")
+      $("#self").prop("checked", true)
+    }else{
+      $("#previousContractor").css("display", "none")
+      $("#previousContractor").find("input:checked").prop("checked", false)
+      $("#previousContractorCome").css("display", "none")
+      $("#previousContractorCome").find("input:checked").prop("checked", false)
+    }
   })
   $(".comer").on("change", function(){
     var id = $('#procedure-select').val();
@@ -154,6 +163,16 @@ jQuery(function($){
       $("#pointCardUser").find("input[type='radio']").prop("disabled", false)
       $("#pointCardUser").css("display", "none")
       $("#pointCardUser").find("input[type='radio']:checked").prop("checked", false)
+    }
+  })
+  $("#previousContractor").on("change", function(){
+    var previousContractor = $('#previousContractor').find("input:checked").val()
+    if(previousContractor >= 2){
+      $("#previousContractorCome").css("display", "block")
+      $("#coming").prop("checked", true)
+    }else{
+      $("#previousContractorCome").css("display", "none")
+      $("#previousContractorCome").find("input:checked").prop("checked", false) 
     }
   })
 });
