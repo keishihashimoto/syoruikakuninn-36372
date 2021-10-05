@@ -101,6 +101,23 @@ class MemoController extends Controller
                 $memo->condition .= PHP_EOL."ポイントカードご利用者様：ご契約者様・ご来店者様のいずれとも同一ではない。携帯回線・クレジットカード・インターネットのいずれかのご契約をお持ちでない。";
             }
         }
+        # MNPの場合は、移転元の契約者に関する情報を追加
+        if($id == 1){
+            if($request->input("previousContractor") == 1){
+                $memo->condition .= PHP_EOL."お乗り換え前のご利用者様：お乗り換え後の契約者様と同一";
+            }elseif($request->input("previousContractor") == 2){
+                $memo->condition .= PHP_EOL."お乗り換え前のご利用者様：お乗り換え後の契約者様とは異なるが、ご住所は同一";
+            }elseif($request->input("previousContractor") == 3){
+                $memo->condition .= PHP_EOL."お乗り換え前のご利用者様：お乗り換え後の契約者様のご家族だが、ご住所は異なる";
+            }elseif($request->input("previousContractor") == 4){
+                $memo->condition .= PHP_EOL."お乗り換え前のご利用者様：お乗り換え後の契約者様のご家族ではなく、ご住所も異なる";
+            }
+            if($request->input("previousContractorCome") == 1){
+                $memo->condition .= PHP_EOL."お乗り換え前のご利用者様のご来店：ご来店予定あり";
+            }elseif($request->input("previousContractorCome") == 2){
+                $memo->condition .= PHP_EOL."お乗り換え前のご利用者様のご来店：ご来店予定なし";
+            }
+        }
         # 一部の手続きに関しては、未成年限定で注意事項を追加
         # 最初に、保護者の同時来店の有無を記載
         # 対象の手続きは、都度同意かどうかによらないものが1 ~ 4, 18, 21
@@ -629,8 +646,9 @@ class MemoController extends Controller
                     }
                 }
                 $memo->save();
-            }elseif(($id <= 3 || ($id == 4 && $request->input("loan") == 1)) && $request->input("relation") <= 3){
+            }elseif(($id <= 3 || ($id == 4 && $request->input("loan") == 1)) && $request->input("relation") <= 3 && $request->input("previousContractor") && ($request->input("previousContractor") == null || $request->input("previousContractor") == 1)){
                 # 家族限定で通常の代理人受付が可能な場合
+                # MNPで契約者が変わらない場合はここに含めるが、変更ありの場合は後に回す。
                 if($id <= 3 && $request->input("relation") == 1){
                     $memo->notice .= PHP_EOL."契約者以外の方がご来店の上で上記のお手続きをいただくにあたり、追加で以下の書類が全て必要になります。".PHP_EOL."・ご来店者様の本人確認書類（運転免許証または個人番号カードまたは健康保険証など。ご契約者様とご来店者様のご住所が同一であることを確認させていただきます）".PHP_EOL."・ご契約様にご記入いただいた委任状（ご記入から3ヶ月後の月末まで有効です）".PHP_EOL."・ご来店者様の住民票・公共料金領収書など（ご来店者様の運転免許証か個人番号カードをお持ちいただいている場合には不要です。詳しくはショップもしくはインフォメーションセンターにお問い合わせください）".PHP_EOL."上記いずれかをご準備いただくようにお願いいたします。";
                 }elseif($id <= 3 && ($request->input("relation") == 2 || $request->input("relation") == 3)){
@@ -641,7 +659,7 @@ class MemoController extends Controller
                     $memo->notice .= PHP_EOL."契約者以外の方がご来店の上で上記のお手続きをいただくにあたり、以下の2点が必ず必要になります".PHP_EOL."・ご来店者様のご本人様確認書類（運転免許証・健康保険証・個人番号カードなど）".PHP_EOL."・ご来店者様とご契約者様の続柄記載のある住民票や戸籍謄本など".PHP_EOL."また、追加で以下のいずれかが必要になります。".PHP_EOL."・ご契約様にご記入いただいた委任状（ご記入から3ヶ月後の月末まで有効です）".PHP_EOL."・お手続きの際にショップからご契約者様にお電話確認をさせていただく（お出にならなかった場合にはお手続きをすることはできません）".PHP_EOL."上記いずれかをご準備、もしくは可能な状態にしていただくようにお願いいたします。";
                 }
                 $memo->save();
-            }elseif($id <= 3){
+            }elseif($id == 2 || $id == 3 ){
                 # 新規系統は家族でないと代理人受付不可なので、既存のレコードを受付不可用のものに切り替える
                 if($memo->memo_licenses->first != null){
                     foreach($memo->memo_licenses as $memo_license){
@@ -770,6 +788,81 @@ class MemoController extends Controller
             # 家族受付可能な状況で、選択した手続きが故障の場合の注意事項
             if($id == 5 && $request->input("relation") <= 3){
                 $memo->notice .= PHP_EOL."ーーご注意！！ーー".PHP_EOL."上記の書類でお受付可能なのは、あくまでも故障（の可能性のある）端末の状態を見させていただくという部分になります。".PHP_EOL."お預かり修理などのお手続きになる場合には委任状などが追加で必要となります。".PHP_EOL."ご不安であればショップまたはインフォメーションセンターにお問い合わせください。";
+            }
+        }
+        # 乗り換えで契約者が変わる場合は、来店者が誰かに関わらず処理を独立させる
+        if($id == 1){
+            #来店者が家族でない場合は手続きできない
+            if($request->input("relation") == 4){
+                if($memo->memo_licenses->first != null){
+                    foreach($memo->memo_licenses as $memo_license){
+                        $memo_license->delete();
+                    }
+                }
+                if($memo->memo_pays->first != null){
+                    foreach($memo->memo_pays as $memo_pay){
+                        $memo_pay->delete();
+                    }
+                }
+                if($memo->memo_papers->first != null){
+                    foreach($memo->memo_papers as $memo_paper){
+                        $memo_paper->delete();
+                    }
+                }
+                $memo_license = new MemoLicense();
+                $memo_license->memo_id = $memo->id;
+                $memo_license->license_id = 99;
+                $memo_license->save();
+                # メモの中身を上書き
+                $memo->notice = PHP_EOL."申し訳ございませんが、上記のお手続きが可能なのは以下の場合に限られます。".PHP_EOL."・契約者ご本人様にご来店いただいた場合".PHP_EOL."・契約者ご本人様とご家族の方にご来店いただいた場合".PHP_EOL."詳しくはショップもしくはインフォメーションセンターにお問い合わせください。";
+            }
+            #移転元契約者が家族でない場合は手続きできない
+            if($request->input("previousContractor") == 4){
+                if($memo->memo_licenses->first != null){
+                    foreach($memo->memo_licenses as $memo_license){
+                        $memo_license->delete();
+                    }
+                }
+                if($memo->memo_pays->first != null){
+                    foreach($memo->memo_pays as $memo_pay){
+                        $memo_pay->delete();
+                    }
+                }
+                if($memo->memo_papers->first != null){
+                    foreach($memo->memo_papers as $memo_paper){
+                        $memo_paper->delete();
+                    }
+                }
+                $memo_license = new MemoLicense();
+                $memo_license->memo_id = $memo->id;
+                $memo_license->license_id = 99;
+                $memo_license->save();
+                # メモの中身を上書き
+                $memo->notice = PHP_EOL."申し訳ございませんが、上記のお手続きが可能なのは以下の場合に限られます。".PHP_EOL."・お乗り換えの前後で契約者が同一の場合".PHP_EOL."・お乗り換え前のご契約者様とお乗り換え後のご契約者様がご家族の場合".PHP_EOL."詳しくはショップもしくはインフォメーションセンターにお問い合わせください。";
+            }
+            # MNPに伴って名義変更する場合の注意事項
+            if(($request->input("comer") == 2 && $request->input("relation") <= 3)|| $request->input("previousContractor") >= 2){
+                $memo->notice .= PHP_EOL."今回のお手続きにあたり、追加で以下のものが必要になります。";
+                if($request->input("comer") == 2){
+                    # 契約者が来店しない場合は来店者の本人確認書類と委任状が必要
+                    $memo->notice .= PHP_EOL."・ご来店者様のご本人様確認書類（運転免許証・健康保険証・個人番号カードなど）".PHP_EOL."・ご来店者様とご契約者様の続柄記載のある住民票や戸籍謄本など".PHP_EOL."・・ご契約様にご記入いただいた委任状（ご記入から3ヶ月後の月末まで有効です。お手続きをご来店者様に委任する旨をご記入ください）。";
+                    # 来店者と契約者が別住所の場合は住民票か戸籍謄本が必要
+                    if($request->input("relation") == 2 || $request->input("relation") == 3){
+                        $memo->notice .= PHP_EOL."・住民票や戸籍謄本などの、ご来店者様とご契約者様の続柄確認が可能なもの";
+                    }
+                }
+                if($request->input("previousContractor") == 2 || $request->input("previousContractor") == 3 ){
+                    $memo->notice .= PHP_EOL."・お乗り換え前のご契約者様のご本人様確認書類（運転免許証・健康保険証・個人番号カードなど）";
+                }
+                if($request->input("previousContractorCome") == 2){
+                    # 譲渡者が来店しない場合は委任状が必要
+                    $memo->notice .= PHP_EOL."・お乗り換え前のご契約様にご記入いただいた委任状（ご記入から3ヶ月後の月末まで有効です。お乗り換えと同時にご名義が変わることにご同意いただける旨をご記入ください）。";
+                }
+                # 住所が異なる場合には、住民票などで続柄確認が必要
+                if($request->input("previousContractor") == 3){
+                    $memo->notice .= PHP_EOL."・住民票や戸籍謄本などの、移転元ご契約者様ととお乗り換え後のご契約者様の続柄確認が可能なもの";
+                }
+                $memo->notice .= PHP_EOL."ご不明点は、ショップもしくはインフォメーションセンターにお問い合わせください。";
             }
         }
         # ポイントカード発行で契約者もしくは利用者が来店できない場合には、注意事項を追加
