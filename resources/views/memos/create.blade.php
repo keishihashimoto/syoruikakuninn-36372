@@ -135,7 +135,7 @@
     </div>
 
     <div id="sim" style="display: none;">
-      <div class="fs-2 alert alert-danger">今回お手続きされる回線のSIMカードをお持ちいただくことは可能ですか？<br class="d-inline d-sm-none">SIMカードを取り出していただく必要はございません。本体に入ったままで大丈夫です。</div>
+      <div class="fs-2 alert alert-danger">今回お手続きされる回線のSIMカードをお持ちいただくことは可能ですか？<br class="d-inline">SIMカードを取り出していただく必要はございません。本体に入ったままで大丈夫です。</div>
       <div class="form-check form-group px-5">
         <input type="radio" class="form-check-input" id="sim-ok" name="sim" value="1" checked>
         <label for="sim-ok" class="form-check-label">SIMカードを持参可能</label>
