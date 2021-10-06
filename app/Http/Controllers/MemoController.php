@@ -45,11 +45,13 @@ class MemoController extends Controller
             "procedure-select" => "お手続き内容"
         ];
         $this->validate($request, $rules, $messages, $translate);
-        # 条件分岐用、ユーザーの年齢を取得
-        $today = new DateTime(date("Y-m-d"));
-        $birthday = new DateTime(Auth::user()->birthday);
-        $age = $today->diff($birthday)->format("%y");
-        $age = (int)$age;
+        # 条件分岐用、ユーザーの年齢を取得（個人名義の場合のみ）
+        if(Auth::user()->is_corporation == 2){
+            $today = new DateTime(date("Y-m-d"));
+            $birthday = new DateTime(Auth::user()->birthday);
+            $age = $today->diff($birthday)->format("%y");
+            $age = (int)$age;
+        }
         # 個人名義の場合は、メモの備考欄冒頭に成人かどうかと学生かどうかを明記。
         # 法人名義の場合は、法人名義である旨を明記
         $memo = new Memo();
